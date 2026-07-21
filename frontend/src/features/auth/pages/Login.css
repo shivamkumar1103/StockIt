@@ -1,0 +1,44 @@
+/* Centers the form on the page */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: sans-serif;
+}
+
+/* Basic card structure and spacing */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 30px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 350px;
+}
+
+.login-form h2 {
+  margin-top: 0;
+  text-align: center;
+}
+
+/* Stacks labels above inputs */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.login-button {
+  padding: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+}
