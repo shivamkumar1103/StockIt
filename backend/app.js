@@ -2,11 +2,11 @@ import express from "express";
 import morgan from "morgan";
 import AppError from "./utils/appError.js";
 import userRouter from "./routes/userRoutes.js";
+import stockRouter from "./routes/stockRoutes.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import dotenv from "dotenv";
 
-dotenv.config({ path: "./config.env" });
+// dotenv.config({ path: "./config.env" });
 
 const app = express();
 
@@ -26,6 +26,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/stocks", stockRouter);
 
 app.use((req, res, next) => {
   const err = new AppError(

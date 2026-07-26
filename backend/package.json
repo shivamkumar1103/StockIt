@@ -4,13 +4,14 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch server.js",
+    "dev": "tsx watch --env-file=config.env server.js",
     "start": "tsx server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "@react-email/components": "^1.0.12",
     "@react-email/render": "^2.1.0",
+    "axios": "^1.18.1",
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
