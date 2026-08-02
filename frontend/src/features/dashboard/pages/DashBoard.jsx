@@ -9,11 +9,19 @@ function DashBoard() {
   const { data: homeData, isLoading, isError } = useHomeData();
 
   if (isLoading) {
-    return <div className="flex justify-center items-center h-full">Loading dashboard...</div>;
+    return (
+      <div className="flex justify-center items-center h-full">
+        Loading dashboard...
+      </div>
+    );
   }
 
   if (isError) {
-    return <div className="flex justify-center items-center h-full text-red-500">Failed to load dashboard data.</div>;
+    return (
+      <div className="flex justify-center items-center h-full text-red-500">
+        Failed to load dashboard data.
+      </div>
+    );
   }
 
   const data = homeData?.data || {};
@@ -22,9 +30,7 @@ function DashBoard() {
     <div className="flex flex-col gap-8">
       {/* Greeting Header */}
       <div>
-        <h1 className="text-2xl font-bold text-[#333333]">
-          Hello Matt,
-        </h1>
+        <h1 className="text-2xl font-bold text-[#333333]">Hello Matt,</h1>
         <p className="text-sm text-gray-400 mt-1">
           Welcome back! Here's your portfolio overview.
         </p>

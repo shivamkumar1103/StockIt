@@ -1,4 +1,5 @@
-import { Search, Moon } from "lucide-react";
+import { Moon } from "lucide-react";
+import SearchBar from "../features/search/components/SearchBar";
 
 export default function Navbar() {
   return (
@@ -10,15 +11,7 @@ export default function Navbar() {
       </div>
 
       <div className="flex items-center gap-8">
-        {/* Search Input */}
-        <div className="relative flex items-center group">
-          <Search className="absolute left-3.5 w-4 h-4 text-gray-400 group-focus-within:text-[#6425FE] transition-colors" />
-          <input
-            type="text"
-            placeholder="Search for stocks and more"
-            className="pl-10 pr-4 py-2 bg-[#F3F0FA] focus:bg-white focus:ring-1 focus:ring-[#6425FE] border border-transparent rounded-full text-sm w-[320px] outline-none transition-all placeholder:text-gray-400 text-gray-700"
-          />
-        </div>
+        <SearchBar />
 
         <button className="text-gray-500 hover:text-[#6425FE] transition-colors flex items-center gap-2 font-medium text-sm">
           <Moon className="w-4.5 h-4.5" />

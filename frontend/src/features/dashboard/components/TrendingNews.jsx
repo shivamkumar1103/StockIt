@@ -9,8 +9,6 @@ const gradients = [
 ];
 
 const TrendingNews = ({ news = [] }) => {
-  console.log("TrendingNews news:", news);
-
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-6 w-full shadow-sm flex flex-col h-full">
       {/* Header */}
