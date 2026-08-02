@@ -40,6 +40,7 @@ export const resendVerificationEmail = async (email) => {
 
 export const getUser = async () => {
   try {
+    console.log("Fetching user data...");
     const response = await api.get("/users/me");
     return response.data;
   } catch (error) {

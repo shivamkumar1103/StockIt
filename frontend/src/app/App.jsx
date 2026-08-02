@@ -3,8 +3,10 @@ import { Toaster } from "react-hot-toast";
 import ProtectedRoute from "../features/auth/routes/ProtectedRoute";
 import AuthProvider from "../features/auth/context/AuthProvider";
 import AuthRoutes from "../features/auth/routes/AuthRoutes";
-import Dashboard from "../pages/Dashboard";
+import Dashboard from "../features/dashboard/pages/DashBoard";
 import Settings from "../pages/Settings";
+import Layout from "../layouts/Layout";
+import "./App.css";
 
 function App() {
   return (
@@ -14,15 +16,19 @@ function App() {
           {/* Public Routes */}
           <Route path="/auth/*" element={<AuthRoutes />} />
 
-          {/* 🔐 Protected Wrapper Route */}
-          <Route element={<ProtectedRoute />}>
+          {/* Protected Wrapper Route */}
+          {/* <Route element={<ProtectedRoute />}> */}
+          <Route element={<Layout />}>
             {/* All routes nested inside here require an authenticated session */}
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="settings" element={<Settings />} />
 
-            {/* Optional: Redirect root "/" to dashboard if logged in */}
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            {/* Additional layout routes can be added here */}
           </Route>
+
+          {/* Optional: Redirect root "/" to dashboard if logged in */}
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          {/* </Route> */}
 
           {/* Catch-all 404 handler */}
           <Route path="*" element={<div>Page Not Found</div>} />

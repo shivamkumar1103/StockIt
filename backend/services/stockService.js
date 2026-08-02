@@ -17,7 +17,17 @@ export const getQuote = async (symbol, market) => {
     },
   });
 
-  return data;
+  return {
+    currentPrice: data.c,
+    change: data.d,
+    percentChange: data.dp,
+    high: data.h,
+    low: data.l,
+    open: data.o,
+    previousClose: data.pc,
+    isProfit: data.d > 0,
+    isLoss: data.d < 0,
+  };
 };
 
 // Company Profile
@@ -74,5 +84,25 @@ export const getHistoricalData = async (symbol, interval, market) => {
     },
   });
 
-  return data;
+  if (!data || !data.values) {
+    return data;
+  }
+
+  return {
+    meta: data.meta,
+    values: data.values.map((v) => {
+      const open = parseFloat(v.open);
+      const close = parseFloat(v.close);
+      return {
+        datetime: v.datetime,
+        open,
+        high: parseFloat(v.high),
+        low: parseFloat(v.low),
+        close,
+        volume: parseInt(v.volume, 10),
+        isProfit: close > open,
+        isLoss: close < open,
+      };
+    }),
+  };
 };
