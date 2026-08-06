@@ -7,10 +7,16 @@ const router = express.Router();
 router
   .route("/quote/:symbol")
   .get(cacheMiddleware("quote"), stockController.getStockQuote);
-router.route("/profile/:symbol").get(stockController.getCompanyProfileInfo);
-router.route("/search").get(stockController.searchForStocks);
-router.route("/news").get(stockController.getNews);
-router.route("/home").get(stockController.getHomeData);
-router.route("/chart/:symbol").get(stockController.getStockChart);
+router
+  .route("/profile/:symbol")
+  .get(cacheMiddleware("profile"), stockController.getCompanyProfileInfo);
+router
+  .route("/search")
+  .get(cacheMiddleware("searchResults"), stockController.searchForStocks);
+router.route("/news").get(cacheMiddleware("news"), stockController.getNews);
+router.route("/home").get(cacheMiddleware("home"), stockController.getHomeData);
+router
+  .route("/chart/:symbol")
+  .get(cacheMiddleware("chart"), stockController.getStockChart);
 
 export default router;

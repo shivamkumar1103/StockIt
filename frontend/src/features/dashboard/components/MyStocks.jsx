@@ -1,39 +1,10 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
+import { Link } from "react-router-dom";
 import StockCard from "@/components/StockCard";
+import { motion } from "framer-motion";
 
 const MyStocks = () => {
   const scrollRef = useRef(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
-
-  const handleMouseDown = (e) => {
-    setIsDragging(true);
-    setStartX(e.pageX - scrollRef.current.offsetLeft);
-    setScrollLeft(scrollRef.current.scrollLeft);
-  };
-
-  const handleMouseLeave = () => {
-    setIsDragging(false);
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const x = e.pageX - scrollRef.current.offsetLeft;
-    const walk = (x - startX) * 2;
-    scrollRef.current.scrollLeft = scrollLeft - walk;
-  };
-
-  const handleWheel = (e) => {
-    if (scrollRef.current && e.deltaY !== 0) {
-      scrollRef.current.scrollLeft += e.deltaY;
-    }
-  };
 
   const stocks = [
     {
@@ -98,19 +69,27 @@ const MyStocks = () => {
       <div className="relative group">
         <div
           ref={scrollRef}
-          className={`flex overflow-x-auto gap-4 scrollbar-hide pb-4 w-full snap-x ${isDragging ? "cursor-grabbing snap-none" : "cursor-grab"}`}
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          onMouseDown={handleMouseDown}
-          onMouseLeave={handleMouseLeave}
-          onMouseUp={handleMouseUp}
-          onMouseMove={handleMouseMove}
-          onWheel={handleWheel}
+          className="overflow-hidden w-full cursor-grab active:cursor-grabbing"
         >
-          {stocks.map((stock) => (
-            <div key={stock.id} className="snap-start shrink-0">
-              <StockCard {...stock} />
-            </div>
-          ))}
+          <motion.div
+            drag="x"
+            dragConstraints={scrollRef}
+            dragElastic={0.35}
+            className="flex gap-4"
+          >
+            {stocks.map((stock) => (
+              <Link
+                key={stock.ticker}
+                to={`/stocks/${stock.ticker}`}
+                className="snap-start shrink-0 no-underline"
+                draggable={false}
+              >
+                <div key={stock.id} className="snap-start shrink-0">
+                  <StockCard {...stock} />
+                </div>
+              </Link>
+            ))}
+          </motion.div>
         </div>
       </div>
     </div>

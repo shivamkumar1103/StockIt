@@ -1,9 +1,14 @@
+/*
+  TEMPORARY CACHE SERVICE(will be replaced with Redis in the future)
+*/
+
 const ExpTime = {
-  quote: 1 * 60 * 1000, // 1 minute
+  quote: 20 * 1000, // 20 seconds
   profile: 24 * 60 * 60 * 1000, // 24 hours
   searchResults: 60 * 60 * 1000, // 1 hour
   news: 5 * 60 * 1000, // 5 minutes
   chart: 24 * 60 * 60 * 1000, // 24 hours
+  home: 2 * 60 * 1000, // 2 minutes
 };
 
 class CacheService {

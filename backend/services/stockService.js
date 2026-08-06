@@ -74,13 +74,14 @@ export const getMarketNews = async (
   return data;
 };
 
-export const getHistoricalData = async (symbol, interval, market) => {
+export const getHistoricalData = async (symbol, interval, market, outputsize = 30) => {
   checkMarket(market);
 
   const { data } = await TwelveDataApi.get("/time_series", {
     params: {
       symbol: symbol.trim().toUpperCase(),
       interval: interval,
+      outputsize: outputsize,
     },
   });
 

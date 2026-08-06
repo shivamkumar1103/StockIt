@@ -15,9 +15,9 @@ const NewsCard = ({ news }) => {
         className={`h-32 w-full relative overflow-hidden shrink-0 ${!news.image ? `bg-linear-to-br ${news.imageGrad}` : "bg-gray-200"}`}
       >
         {news.image && (
-          <img 
-            src={news.image} 
-            alt={news.title} 
+          <img
+            src={news.image}
+            alt={news.title}
             className="w-full h-full object-cover"
           />
         )}
@@ -29,7 +29,7 @@ const NewsCard = ({ news }) => {
       </div>
 
       {/* Content */}
-      <div className="p-4 flex flex-col flex-grow">
+      <div className="p-4 flex flex-col grow">
         <h3 className="font-bold text-[#333333] text-sm md:text-base leading-tight mb-3 group-hover:text-[#6425FE] transition-colors line-clamp-3">
           {news.title}
         </h3>

@@ -9,7 +9,6 @@ import {
 } from "../services/stockService.js";
 
 export const getStockQuote = async (req, res, next) => {
-  console.log("getQuote callled");
   // 1. Validate query parameters
   if (!req.params.symbol || !req.query.market) {
     return next(new AppError("Symbol and market are required", 400));
@@ -115,10 +114,12 @@ export const getStockChart = async (req, res, next) => {
   }
   // 2. Fetch and send stock chart data
   try {
+    const outputsize = parseInt(req.query.outputsize, 10) || 30;
     const historicalData = await getHistoricalData(
       req.params.symbol,
       req.query.interval,
       req.query.market,
+      outputsize,
     );
     res.status(200).json({
       status: "success",
