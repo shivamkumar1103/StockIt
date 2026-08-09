@@ -1,4 +1,4 @@
-import cache from "./cacheService.js";
+import cache from "../services/cacheService.js";
 
 const cacheMiddleware = (type) => (req, res, next) => {
   const key = `cache:${req.originalUrl}`;
@@ -11,8 +11,11 @@ const cacheMiddleware = (type) => (req, res, next) => {
   const originalJson = res.json.bind(res);
   // Override the res.json method to cache the response before sending it
   res.json = (body) => {
-    cache.set(key, body, type);
-    originalJson(body);
+    // ONLY cache if the response status is 2xx (Success)
+    if (res.statusCode >= 200 && res.statusCode < 300) {
+      cache.set(key, body, type);
+    }
+    return originalJson(body);
   };
   next();
 };

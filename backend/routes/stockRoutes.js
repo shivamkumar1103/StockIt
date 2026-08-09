@@ -1,6 +1,6 @@
 import express from "express";
 import * as stockController from "../controllers/stockController.js";
-import cacheMiddleware from "../services/cacheMiddleware.js";
+import cacheMiddleware from "../middleware/cacheMiddleware.js";
 
 const router = express.Router();
 

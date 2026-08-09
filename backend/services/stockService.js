@@ -1,5 +1,4 @@
-import api from "../utils/stockApi.js";
-import TwelveDataApi from "../utils/twelveDataApi.js";
+import * as stockRepository from "../repository/stockRepository.js";
 
 const checkMarket = (market) => {
   if (market === "IN") {
@@ -11,11 +10,7 @@ const checkMarket = (market) => {
 export const getQuote = async (symbol, market) => {
   checkMarket(market);
 
-  const { data } = await api.get("/quote", {
-    params: {
-      symbol: symbol.trim().toUpperCase(),
-    },
-  });
+  const data = await stockRepository.fetchQuote(symbol.trim().toUpperCase());
 
   return {
     currentPrice: data.c,
@@ -33,57 +28,39 @@ export const getQuote = async (symbol, market) => {
 // Company Profile
 export const getCompanyProfile = async (symbol, market) => {
   checkMarket(market);
-
-  const { data } = await api.get("/stock/profile2", {
-    params: {
-      symbol: symbol.trim().toUpperCase(),
-    },
-  });
-
-  return data;
+  return await stockRepository.fetchCompanyProfile(symbol.trim().toUpperCase());
 };
 
 // Search
 export const searchStocks = async (query, market) => {
   checkMarket(market);
-
-  const { data } = await api.get("/search", {
-    params: {
-      q: query.trim(),
-    },
-  });
-
-  return data;
+  return await stockRepository.fetchSearchResults(query.trim());
 };
 
-// Market New
+// Market News
 export const getMarketNews = async (
   category = "general",
   market,
   minId = 0,
 ) => {
   checkMarket(market);
-
-  const { data } = await api.get("/news", {
-    params: {
-      category,
-      minId,
-    },
-  });
-
-  return data;
+  return await stockRepository.fetchNews(category, minId);
 };
 
-export const getHistoricalData = async (symbol, interval, market, outputsize = 30) => {
+// Historical Data
+export const getHistoricalData = async (
+  symbol,
+  interval,
+  market,
+  outputsize = 30,
+) => {
   checkMarket(market);
 
-  const { data } = await TwelveDataApi.get("/time_series", {
-    params: {
-      symbol: symbol.trim().toUpperCase(),
-      interval: interval,
-      outputsize: outputsize,
-    },
-  });
+  const data = await stockRepository.fetchTimeSeries(
+    symbol.trim().toUpperCase(),
+    interval,
+    outputsize,
+  );
 
   if (!data || !data.values) {
     return data;

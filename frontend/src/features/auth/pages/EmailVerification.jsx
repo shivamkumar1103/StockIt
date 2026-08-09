@@ -36,7 +36,10 @@ function EmailVerification() {
               {error?.message ||
                 "Verification failed. The link may be expired or invalid."}
             </p>
-            <Link to="/auth/signup" className="auth-button link-button">
+            <Link
+              to="/auth/resendVerificationEmail"
+              className="auth-button link-button"
+            >
               Request new link
             </Link>
           </div>
