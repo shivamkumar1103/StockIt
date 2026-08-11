@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 
 const StatCard = ({ label, value, icon: Icon }) => (
-  <div className="flex-1 min-w-[140px] bg-gray-50/80 rounded-xl p-4 border border-gray-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+  <div className="flex-1 min-w-35 bg-gray-50/80 rounded-xl p-4 border border-gray-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
     <div className="flex items-center gap-2 mb-2">
       <Icon size={18} className="text-[#6425FE]" />
       <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">

@@ -3,6 +3,7 @@ import morgan from "morgan";
 import AppError from "./utils/appError.js";
 import userRouter from "./routes/userRoutes.js";
 import stockRouter from "./routes/stockRoutes.js";
+import watchlistRouter from "./routes/watchlistRoutes.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
@@ -27,6 +28,7 @@ app.use(cookieParser());
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/stocks", stockRouter);
+app.use("/api/v1/watchlist", watchlistRouter);
 
 app.use((req, res, next) => {
   const err = new AppError(

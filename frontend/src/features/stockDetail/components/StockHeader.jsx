@@ -1,5 +1,8 @@
-import { ArrowUp, ArrowDown, Star } from "lucide-react";
+import { ArrowUp, ArrowDown, Star, Loader2 } from "lucide-react";
 import useStockQuote from "../hooks/useStockQuote";
+import { useWatchlist } from "../../../hooks/useWatchlist";
+import useAddToWatchlist from "../../../hooks/useAddToWatchlist";
+import useRemoveFromWatchlist from "../../../hooks/useRemoveFromWatchlist";
 
 const StockHeader = ({ symbol, meta }) => {
   const exchange = meta?.exchange || "—";
@@ -14,6 +17,31 @@ const StockHeader = ({ symbol, meta }) => {
   const percentChange = quote?.percentChange;
   const isProfit = quote?.isProfit;
 
+  // Watchlist state
+  const { data: watchlistResponse } = useWatchlist();
+  const { addToWatchlist, isPending: isAdding } = useAddToWatchlist();
+  const { removeFromWatchlist, isPending: isRemoving } =
+    useRemoveFromWatchlist();
+
+  const watchlistStocks = watchlistResponse?.data || [];
+  const isInWatchlist = watchlistStocks.some(
+    (s) => s.symbol?.toUpperCase() === symbol?.toUpperCase(),
+  );
+  const isWatchlistLoading = isAdding || isRemoving;
+
+  const handleToggleWatchlist = () => {
+    if (isWatchlistLoading) return;
+
+    if (isInWatchlist) {
+      removeFromWatchlist(symbol);
+    } else {
+      addToWatchlist({
+        symbol: symbol,
+        exchange: exchange,
+      });
+    }
+  };
+
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       {/* Left: Symbol + exchange */}
@@ -26,8 +54,27 @@ const StockHeader = ({ symbol, meta }) => {
             <h1 className="text-2xl font-bold text-[#333333] tracking-tight">
               {symbol}
             </h1>
-            <button className="text-amber-400 hover:text-amber-500 transition-colors">
-              <Star size={18} fill="currentColor" />
+            <button
+              onClick={handleToggleWatchlist}
+              disabled={isWatchlistLoading}
+              className={`transition-all duration-200 cursor-pointer disabled:cursor-wait ${
+                isInWatchlist
+                  ? "text-amber-400 hover:text-amber-500"
+                  : "text-gray-300 hover:text-amber-400"
+              }`}
+              title={
+                isInWatchlist ? "Remove from watchlist" : "Add to watchlist"
+              }
+            >
+              {isWatchlistLoading ? (
+                <Loader2 size={18} className="animate-spin text-gray-400" />
+              ) : (
+                <Star
+                  size={18}
+                  fill={isInWatchlist ? "currentColor" : "none"}
+                  strokeWidth={isInWatchlist ? 0 : 2}
+                />
+              )}
             </button>
           </div>
           <span className="text-sm text-gray-400 font-medium">

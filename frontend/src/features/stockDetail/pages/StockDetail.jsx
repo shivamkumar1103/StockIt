@@ -21,6 +21,7 @@ function StockDetail() {
     isPending: isChartLoading,
     isError: isChartError,
   } = useStockChart(upperSymbol, interval, outputsize);
+  console.log("chart", chartResponse);
 
   const chartData = chartResponse?.data || {};
   const meta = chartData.meta || {};
