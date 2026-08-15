@@ -6,9 +6,9 @@ import TrendingNews from "../components/TrendingNews";
 import { useHomeData } from "../hooks/useHomeData";
 
 function DashBoard() {
-  const { data: homeData, isLoading, isError } = useHomeData();
+  const { data: homeData, isPending, isError } = useHomeData();
 
-  if (isLoading) {
+  if (isPending) {
     return (
       <div className="flex justify-center items-center h-full">
         Loading dashboard...

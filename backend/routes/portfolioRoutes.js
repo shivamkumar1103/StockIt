@@ -8,6 +8,7 @@ router.use(protect);
 
 // Portfolio routes
 router.get("/portfolio", PortfolioController.getPortfolio);
+router.get("/getMyStocks", PortfolioController.getStocks);
 
 // Wallet routes
 router.get("/wallet", PortfolioController.getWallet);

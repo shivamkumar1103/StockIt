@@ -3,6 +3,7 @@ import Wallet from "../models/WalletModel.js";
 import Order from "../models/OrderModel.js";
 import Transaction from "../models/TransactionModel.js";
 import Trade from "../models/TradeModel.js";
+import { getQuote } from "../services/stockService.js";
 
 export const getUserPortfolio = async (userId) => {
   // Check if the portfolio exists for the user
@@ -14,6 +15,17 @@ export const getUserPortfolio = async (userId) => {
   }
   // Return the portfolio
   return portfolio;
+};
+
+export const getStockData = async (symbols) => {
+  // Fetch stock data for each symbol
+  const stockData = await Promise.all(
+    symbols.map(async (symbol) => {
+      const quote = await getQuote(symbol);
+      return { symbol, ...quote };
+    }),
+  );
+  return stockData;
 };
 
 export const getUserWallet = async (userId) => {

@@ -5,6 +5,14 @@ export const getUserPortfolio = async (userId) => {
   return await PortfolioRepository.getUserPortfolio(userId);
 };
 
+export const getUserStocks = async (userId) => {
+  const myStocks = await PortfolioRepository.getUserPortfolio(userId);
+  const symbols = myStocks.holdings.map((holding) => holding.symbol);
+
+  const stockData = await PortfolioRepository.getStockData(symbols);
+  return stockData;
+};
+
 export const getUserWallet = async (userId) => {
   return await PortfolioRepository.getUserWallet(userId);
 };

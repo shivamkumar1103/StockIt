@@ -6,6 +6,12 @@ export const getPortfolio = async (req, res) => {
   res.status(200).json({ status: "success", data: portfolio });
 };
 
+export const getStocks = async (req, res) => {
+  const userId = req.user.id;
+  const stockData = await PortfolioService.getUserStocks(userId);
+  res.status(200).json({ status: "success", data: stockData });
+};
+
 export const getWallet = async (req, res) => {
   const userId = req.user.id;
   const wallet = await PortfolioService.getUserWallet(userId);

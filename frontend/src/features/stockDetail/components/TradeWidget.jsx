@@ -72,7 +72,7 @@ const TradeWidget = ({ symbol, quoteResponse, isQuoteLoading }) => {
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-6 flex-grow">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-6 grow">
         {/* Order Type */}
         <div className="flex justify-between items-center text-sm">
           <span className="text-gray-500">Order Type</span>

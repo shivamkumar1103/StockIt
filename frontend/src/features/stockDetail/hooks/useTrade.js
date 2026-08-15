@@ -11,11 +11,12 @@ export const useBuyStock = () => {
       toast.success(data.message || "Stock purchased successfully!");
       // Invalidate queries that might be affected by the trade
       queryClient.invalidateQueries({ queryKey: ["portfolio"] });
-      queryClient.invalidateQueries({ queryKey: ["user"] });
+      queryClient.invalidateQueries({ queryKey: ["myStocks"] });
     },
     onError: (error) => {
       toast.error(
-        error.response?.data?.message || "Failed to buy stock. Please try again."
+        error.response?.data?.message ||
+          "Failed to buy stock. Please try again.",
       );
     },
   });
@@ -30,11 +31,12 @@ export const useSellStock = () => {
       toast.success(data.message || "Stock sold successfully!");
       // Invalidate queries that might be affected by the trade
       queryClient.invalidateQueries({ queryKey: ["portfolio"] });
-      queryClient.invalidateQueries({ queryKey: ["user"] });
+      queryClient.invalidateQueries({ queryKey: ["myStocks"] });
     },
     onError: (error) => {
       toast.error(
-        error.response?.data?.message || "Failed to sell stock. Please try again."
+        error.response?.data?.message ||
+          "Failed to sell stock. Please try again.",
       );
     },
   });
