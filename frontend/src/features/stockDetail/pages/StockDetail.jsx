@@ -14,8 +14,8 @@ function StockDetail() {
   const navigate = useNavigate();
   const upperSymbol = symbol?.toUpperCase();
 
-  const [interval, setInterval] = useState("1week");
-  const [outputsize, setOutputsize] = useState(30);
+  const [interval, setInterval] = useState("30min");
+  const [outputsize, setOutputsize] = useState(65); // Default to 5D
   const [activeLabel, setActiveLabel] = useState("5D");
 
   const { data: quoteResponse, isPending: isQuoteLoading } =

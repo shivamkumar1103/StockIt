@@ -3,36 +3,6 @@ import PortfolioBalance from "../components/PortfolioBalance";
 import PortfolioAssets from "../components/PortfolioAssets";
 import PortfolioHistory from "../components/PortfolioHistory";
 
-const mockTransactions = [
-  {
-    id: 1,
-    symbol: "NVDA",
-    name: "NVIDIA Corp",
-    type: "Buy",
-    price: 890.5,
-    amount: 10.0,
-    status: "Filled",
-  },
-  {
-    id: 2,
-    symbol: "ABNB",
-    name: "Airbnb Inc",
-    type: "Sell",
-    price: 95.2,
-    amount: 50.0,
-    status: "Filled",
-  },
-  {
-    id: 3,
-    symbol: "MSFT",
-    name: "Microsoft Corp",
-    type: "Buy",
-    price: 402.1,
-    amount: 15.0,
-    status: "Pending",
-  },
-];
-
 export default function Portfolio() {
   const { data: portfolioData, isPending, isError } = usePortfolio();
 
@@ -56,6 +26,7 @@ export default function Portfolio() {
   const stocks = portfolio.holdings || [];
   const currentValue = portfolio.currentValue || 0;
   const totalInvested = portfolio.totalInvestment || 0;
+  const walletBalance = portfolio.walletBalance ?? 0;
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-7xl mx-auto">
@@ -72,6 +43,7 @@ export default function Portfolio() {
           <PortfolioBalance
             currentValue={currentValue}
             totalInvested={totalInvested}
+            walletBalance={walletBalance}
           />
         </div>
 
@@ -82,7 +54,7 @@ export default function Portfolio() {
 
         {/* History Section */}
         <div className="lg:col-span-12">
-          <PortfolioHistory transactions={mockTransactions} />
+          <PortfolioHistory />
         </div>
       </div>
     </div>

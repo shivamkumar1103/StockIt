@@ -58,17 +58,17 @@ function DashBoard() {
         </p>
       </div>
 
-      {/* ── My Stocks ─────────────────────────────────── */}
+      {/* ── Popular Stocks ────────────────────────────── */}
       <section>
-        <MyStocks stocks={stocks} />
+        <PopularStocks popularStocks={data.popular} />
       </section>
 
       {/* Divider */}
       <hr className="border-gray-100" />
 
-      {/* ── Popular Stocks ────────────────────────────── */}
+      {/* ── My Stocks ─────────────────────────────────── */}
       <section>
-        <PopularStocks popularStocks={data.popular} />
+        <MyStocks stocks={stocks} />
       </section>
 
       {/* Divider */}
