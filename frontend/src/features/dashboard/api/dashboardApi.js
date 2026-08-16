@@ -5,7 +5,7 @@ export const getHomeData = async (market = "US") => {
   return response.data;
 };
 
-export const getMyStocks = async () => {
-  const response = await api.get("/trading/getMyStocks");
+export const getPortfolio = async () => {
+  const response = await api.get("/trading/portfolio");
   return response.data;
 };

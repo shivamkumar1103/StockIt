@@ -4,11 +4,21 @@ import BalanceCard from "../components/BalanceCard";
 import Watchlist from "../components/Watchlist";
 import TrendingNews from "../components/TrendingNews";
 import { useHomeData } from "../hooks/useHomeData";
+import usePortfolio from "../hooks/usePortfolio";
 
 function DashBoard() {
-  const { data: homeData, isPending, isError } = useHomeData();
+  const {
+    data: homeData,
+    isPending: isHomePending,
+    isError: isHomeError,
+  } = useHomeData();
+  const {
+    data: portfolioData,
+    isPending: isPortfolioPending,
+    isError: isPortfolioError,
+  } = usePortfolio();
 
-  if (isPending) {
+  if (isHomePending || isPortfolioPending) {
     return (
       <div className="flex justify-center items-center h-full">
         Loading dashboard...
@@ -16,7 +26,7 @@ function DashBoard() {
     );
   }
 
-  if (isError) {
+  if (isHomeError || isPortfolioError) {
     return (
       <div className="flex justify-center items-center h-full text-red-500">
         Failed to load dashboard data.
@@ -25,6 +35,18 @@ function DashBoard() {
   }
 
   const data = homeData?.data || {};
+  const portfolio = portfolioData?.data || {};
+  const stocks = portfolio.holdings || [];
+
+  const totalInvested = portfolio.totalInvestment || 0;
+
+  // Find best stock based on unrealizedPnL
+  let bestStock = null;
+  if (stocks.length > 0) {
+    bestStock = stocks.reduce((prev, current) => {
+      return prev.unrealizedPnL > current.unrealizedPnL ? prev : current;
+    });
+  }
 
   return (
     <div className="flex flex-col gap-8">
@@ -38,7 +60,7 @@ function DashBoard() {
 
       {/* ── My Stocks ─────────────────────────────────── */}
       <section>
-        <MyStocks />
+        <MyStocks stocks={stocks} />
       </section>
 
       {/* Divider */}
@@ -55,7 +77,12 @@ function DashBoard() {
       {/* ── Balance + Watchlist side-by-side ───────────── */}
       <section className="flex flex-col lg:flex-row gap-6">
         <div className="lg:w-[60%] w-full">
-          <BalanceCard />
+          <BalanceCard
+            walletBalance={portfolio.walletBalance || 0}
+            currentValue={portfolio.currentValue || 0}
+            totalInvested={totalInvested}
+            bestStock={bestStock}
+          />
         </div>
         <div className="lg:w-[40%] w-full">
           <Watchlist />

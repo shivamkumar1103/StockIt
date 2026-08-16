@@ -4,6 +4,7 @@ import ProtectedRoute from "../features/auth/routes/ProtectedRoute";
 import AuthProvider from "../features/auth/context/AuthProvider";
 import AuthRoutes from "../features/auth/routes/AuthRoutes";
 import Dashboard from "../features/dashboard/pages/DashBoard";
+import Portfolio from "../features/portfolio/pages/Portfolio";
 import StockDetail from "../features/stockDetail/pages/StockDetail";
 import Settings from "../pages/Settings";
 import Layout from "../layouts/Layout";
@@ -22,6 +23,7 @@ function App() {
             <Route element={<Layout />}>
               {/* All routes nested inside here require an authenticated session */}
               <Route path="dashboard" element={<Dashboard />} />
+              <Route path="portfolio" element={<Portfolio />} />
               <Route path="settings" element={<Settings />} />
               <Route path="stocks/:symbol" element={<StockDetail />} />
 
