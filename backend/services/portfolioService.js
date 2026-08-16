@@ -2,7 +2,56 @@ import * as PortfolioRepository from "../repository/portfolioRepository.js";
 import AppError from "../utils/appError.js";
 
 export const getUserPortfolio = async (userId) => {
-  return await PortfolioRepository.getUserPortfolio(userId);
+  const portfolio = await PortfolioRepository.getUserPortfolio(userId);
+  const symbols = portfolio.holdings.map((holding) => holding.symbol);
+
+  let stockData = [];
+  if (symbols.length > 0) {
+    stockData = await PortfolioRepository.getStockData(symbols);
+  }
+
+  const stockMap = {};
+  stockData.forEach((stock) => {
+    stockMap[stock.symbol] = stock;
+  });
+
+  let totalInvestment = 0;
+  let currentValue = 0;
+
+  const enrichedHoldings = portfolio.holdings.map((holding) => {
+    const liveData = stockMap[holding.symbol] || {};
+    const currentPrice = liveData.currentPrice || holding.averagePrice || 0;
+
+    const holdingInvestment = holding.quantity * holding.averagePrice;
+    const holdingCurrentValue = holding.quantity * currentPrice;
+
+    totalInvestment += holdingInvestment;
+    currentValue += holdingCurrentValue;
+
+    return {
+      ...(holding.toObject ? holding.toObject() : holding),
+      currentPrice,
+      investmentValue: holdingInvestment,
+      currentValue: holdingCurrentValue,
+      unrealizedPnL: holdingCurrentValue - holdingInvestment,
+      ...liveData,
+    };
+  });
+
+  const unrealizedPnL = currentValue - totalInvestment;
+
+  const wallet = await PortfolioRepository.getUserWallet(userId);
+  const walletBalance = wallet ? wallet.balance : 0;
+  const totalBalance = walletBalance + currentValue;
+
+  return {
+    holdings: enrichedHoldings,
+    totalInvestment,
+    currentValue,
+    unrealizedPnL,
+    totalBalance,
+    walletBalance,
+  };
 };
 
 export const getUserStocks = async (userId) => {

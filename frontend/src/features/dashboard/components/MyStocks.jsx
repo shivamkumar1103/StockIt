@@ -2,21 +2,12 @@ import { useRef } from "react";
 import { Link } from "react-router-dom";
 import StockCard from "@/components/StockCard";
 import { motion } from "framer-motion";
-import useMyStocks from "../hooks/useMyStocks";
 
 const colors = ["blue", "mint", "yellow", "purple"];
 
-const MyStocks = () => {
+const MyStocks = ({ stocks }) => {
   const scrollRef = useRef(null);
-  const { data: myStocks, isPending, isError } = useMyStocks();
-  const stocks = myStocks?.data || [];
 
-  if (isPending) {
-    return <div>Loading...</div>;
-  }
-  if (isError) {
-    return <div>Error loading stocks.</div>;
-  }
   if (!stocks || stocks.length === 0) {
     return <div>No stocks available.</div>;
   }
@@ -44,8 +35,8 @@ const MyStocks = () => {
                 <StockCard
                   name={stock.symbol}
                   ticker={stock.symbol}
-                  change={stock.change}
                   value={stock.currentPrice}
+                  averagePrice={stock.averagePrice}
                   color={colors[idx % colors.length]}
                 />
               </Link>

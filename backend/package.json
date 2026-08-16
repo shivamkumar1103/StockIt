@@ -4,8 +4,8 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch --env-file=config.env server.js",
-    "start": "tsx server.js",
+    "dev": "node init && tsx watch --env-file=config.env server.js",
+    "start": "node init && tsx server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
