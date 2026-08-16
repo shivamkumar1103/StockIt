@@ -7,7 +7,7 @@ const checkMarket = (market) => {
 };
 
 // Quote
-export const getQuote = async (symbol, market) => {
+export const getQuote = async (symbol, market = "US") => {
   checkMarket(market);
 
   const data = await stockRepository.fetchQuote(symbol.trim().toUpperCase());

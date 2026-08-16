@@ -6,15 +6,20 @@ import StockHeader from "../components/StockHeader";
 import IntervalTabs from "../components/IntervalTabs";
 import StockChart from "../components/StockChart";
 import StockStats from "../components/StockStats";
+import TradeWidget from "../components/TradeWidget";
+import useStockQuote from "../hooks/useStockQuote";
 
 function StockDetail() {
   const { symbol } = useParams();
   const navigate = useNavigate();
   const upperSymbol = symbol?.toUpperCase();
 
-  const [interval, setInterval] = useState("1week");
-  const [outputsize, setOutputsize] = useState(30);
+  const [interval, setInterval] = useState("30min");
+  const [outputsize, setOutputsize] = useState(65); // Default to 5D
   const [activeLabel, setActiveLabel] = useState("5D");
+
+  const { data: quoteResponse, isPending: isQuoteLoading } =
+    useStockQuote(symbol);
 
   const {
     data: chartResponse,
@@ -48,36 +53,54 @@ function StockDetail() {
       </button>
 
       {/* Stock Header */}
-      <StockHeader symbol={upperSymbol} meta={meta} />
+      <StockHeader
+        symbol={upperSymbol}
+        meta={meta}
+        quoteResponse={quoteResponse}
+        isQuoteLoading={isQuoteLoading}
+      />
 
       {/* Divider */}
       <hr className="border-gray-100" />
 
-      {/* Interval Tabs */}
-      <IntervalTabs
-        activeInterval={activeLabel}
-        onIntervalChange={handleIntervalChange}
-      />
-
-      {/* Chart */}
-      <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-        {isChartError ? (
-          <div className="w-full h-80 flex items-center justify-center">
-            <span className="text-red-500 text-sm font-medium">
-              Failed to load chart data. Please try again.
-            </span>
-          </div>
-        ) : (
-          <StockChart
-            values={values}
-            isLoading={isChartLoading}
-            isIntraday={activeLabel === "1D"}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 flex flex-col gap-6">
+          {/* Interval Tabs */}
+          <IntervalTabs
+            activeInterval={activeLabel}
+            onIntervalChange={handleIntervalChange}
           />
-        )}
-      </div>
 
-      {/* Stats */}
-      <StockStats values={values} />
+          {/* Chart */}
+          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+            {isChartError ? (
+              <div className="w-full h-80 flex items-center justify-center">
+                <span className="text-red-500 text-sm font-medium">
+                  Failed to load chart data. Please try again.
+                </span>
+              </div>
+            ) : (
+              <StockChart
+                values={values}
+                isLoading={isChartLoading}
+                isIntraday={activeLabel === "1D"}
+              />
+            )}
+          </div>
+
+          {/* Stats */}
+          <StockStats values={values} />
+        </div>
+
+        {/* Trade Widget */}
+        <div className="lg:col-span-1">
+          <TradeWidget
+            symbol={upperSymbol}
+            quoteResponse={quoteResponse}
+            isQuoteLoading={isQuoteLoading}
+          />
+        </div>
+      </div>
     </div>
   );
 }

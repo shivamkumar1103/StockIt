@@ -1,74 +1,96 @@
 import { ArrowUp, ArrowDown } from "lucide-react";
 
-const StockCard = ({ name, ticker, change, value, color }) => {
-  const getColors = () => {
-    switch (color) {
-      case "purple":
-        return {
-          bg: "bg-[#6425FE]/10",
-          iconBg: "bg-[#6425FE]",
-          iconText: "text-white",
-        };
-      case "mint":
-        return {
-          bg: "bg-[#A6F7E2]/40",
-          iconBg: "bg-[#10B981]",
-          iconText: "text-white",
-        };
-      case "yellow":
-        return {
-          bg: "bg-[#FFE5A5]/40",
-          iconBg: "bg-[#F59E0B]",
-          iconText: "text-white",
-        };
-      case "blue":
-        return {
-          bg: "bg-[#9EC6FA]/40",
-          iconBg: "bg-[#3B82F6]",
-          iconText: "text-white",
-        };
-      default:
-        return {
-          bg: "bg-gray-100",
-          iconBg: "bg-gray-400",
-          iconText: "text-white",
-        };
-    }
-  };
+const StockCard = ({ name, ticker, value, change, averagePrice, quantity }) => {
+  const current = value || 0;
 
-  const colors = getColors();
-  const isPositive = change >= 0;
+  // Logic for owned stocks
+  const isOwned = averagePrice !== undefined && averagePrice !== null;
+  const percentChange =
+    isOwned && averagePrice > 0
+      ? ((current - averagePrice) / averagePrice) * 100
+      : 0;
+
+  // Choose which change to display (personal % change if owned, market change otherwise)
+  const displayChange = isOwned ? percentChange : change || 0;
+  const isPositive = displayChange >= 0;
+
+  const totalReturn = isOwned && quantity
+    ? (current - averagePrice) * quantity
+    : 0;
+
+  const bgColors = ["bg-[#6425FE]", "bg-[#10B981]", "bg-[#F59E0B]", "bg-[#3B82F6]", "bg-[#EC4899]"];
+  const logoBg = bgColors[(ticker?.charCodeAt(0) || 0) % bgColors.length];
 
   return (
-    <div className={`min-w-[200px] ${colors.bg} rounded-2xl p-5 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:shadow-md hover:-translate-y-1 border border-white/20`}>
-      <div className="flex justify-between items-start">
+    <div className="min-w-64 bg-[#1E1E1E] rounded-xl p-5 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border border-gray-800">
+      <div className="flex justify-between items-start mb-6">
         <div className="flex items-center gap-3">
-          <div className={`w-10 h-10 rounded-full ${colors.iconBg} ${colors.iconText} flex items-center justify-center font-bold text-sm shadow-sm`}>
-            {name ? name.charAt(0).toUpperCase() : "?"}
+          <div className={`w-12 h-12 rounded-full ${logoBg} flex items-center justify-center text-white shadow-sm font-bold text-xl`}>
+            {ticker?.charAt(0).toUpperCase()}
           </div>
           <div className="flex flex-col">
-            <span className="font-bold text-gray-900 leading-none">{ticker}</span>
-            <span className="text-xs text-gray-500 font-medium mt-1 truncate max-w-[100px]">{name}</span>
+            <span className="text-gray-400 font-medium text-sm leading-tight uppercase">
+              {name || ticker}
+            </span>
+            <span className="font-bold text-white tracking-wide mt-0.5">
+              {ticker}
+            </span>
           </div>
+        </div>
+        <div
+          className={`flex items-center px-2 py-1 rounded text-sm font-medium ${
+            isPositive
+              ? "bg-[#137333]/20 text-[#4ADE80]"
+              : "bg-[#A50E0E]/20 text-[#F87171]"
+          }`}
+        >
+          {isPositive ? (
+            <ArrowUp size={14} strokeWidth={2.5} className="mr-1" />
+          ) : (
+            <ArrowDown size={14} strokeWidth={2.5} className="mr-1" />
+          )}
+          {Math.abs(displayChange).toFixed(1)}%
         </div>
       </div>
 
-      <div className="mt-6 flex flex-col gap-2">
-        <span className="text-2xl font-extrabold text-gray-900 tracking-tight">
-          ${value.toFixed(2)}
+      <div className="flex flex-col gap-1 mb-4">
+        <span className="text-gray-400 text-sm">Current Price</span>
+        <span className="text-3xl font-bold text-white tracking-tight">
+          ${current.toFixed(2)}
         </span>
-        <div className={`flex items-center w-fit px-2 py-1 rounded-md text-sm font-bold ${
-          isPositive ? "text-[#137333] bg-[#E6F4EA]" : "text-[#A50E0E] bg-[#FCE8E6]"
-        }`}>
-          {isPositive ? (
-            <ArrowUp size={16} strokeWidth={3} className="mr-1" />
-          ) : (
-            <ArrowDown size={16} strokeWidth={3} className="mr-1" />
-          )}
-          {isPositive ? "+" : ""}
-          {change.toFixed(2)}
-        </div>
       </div>
+
+      <hr className="border-gray-800 my-4" />
+
+      {isOwned ? (
+        <div className="flex justify-between items-end">
+          <div className="flex flex-col gap-1">
+            <span className="text-gray-400 text-sm">Avg Buy Price</span>
+            <span className="text-lg font-medium text-white">
+              ${averagePrice.toFixed(2)}
+            </span>
+          </div>
+          <div className="flex flex-col gap-1 items-end">
+            <span className="text-gray-400 text-sm">Total Return</span>
+            <span
+              className={`text-lg font-medium ${
+                isPositive ? "text-[#4ADE80]" : "text-[#F87171]"
+              }`}
+            >
+              {isPositive ? "+" : "-"}${Math.abs(totalReturn).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+          </div>
+        </div>
+      ) : (
+        <div className="flex justify-between items-end">
+          <div className="flex flex-col gap-1">
+            <span className="text-gray-400 text-sm">Action</span>
+            <span className="text-lg font-medium text-white">
+              View Details
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,15 +1,11 @@
 import { ArrowUp, ArrowDown, Star, Loader2 } from "lucide-react";
-import useStockQuote from "../hooks/useStockQuote";
 import { useWatchlist } from "../../../hooks/useWatchlist";
 import useAddToWatchlist from "../../../hooks/useAddToWatchlist";
 import useRemoveFromWatchlist from "../../../hooks/useRemoveFromWatchlist";
 
-const StockHeader = ({ symbol, meta }) => {
+const StockHeader = ({ symbol, meta, quoteResponse, isQuoteLoading }) => {
   const exchange = meta?.exchange || "—";
   const type = meta?.type || "";
-
-  const { data: quoteResponse, isPending: isQuoteLoading } =
-    useStockQuote(symbol);
 
   const quote = quoteResponse?.data || {};
   const currentPrice = quote?.currentPrice;
