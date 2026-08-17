@@ -1,4 +1,5 @@
 import { TrendingUp, ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import NewsCard from "@/components/NewsCard";
 
 const gradients = [
@@ -19,13 +20,16 @@ const TrendingNews = ({ news = [] }) => {
           </div>
           <h2 className="text-xl font-bold text-[#333333]">Trending News</h2>
         </div>
-        <button className="text-sm font-semibold text-[#6425FE] hover:text-[#804dfa] transition-colors flex items-center gap-1 group">
+        <Link
+          to="/news"
+          className="text-sm font-semibold text-[#6425FE] hover:text-[#804dfa] transition-colors flex items-center gap-1 group"
+        >
           View All{" "}
           <ChevronRight
             size={16}
             className="group-hover:translate-x-1 transition-transform"
           />
-        </button>
+        </Link>
       </div>
 
       {/* News Grid */}

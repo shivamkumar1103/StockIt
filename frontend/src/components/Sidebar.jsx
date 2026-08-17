@@ -10,7 +10,7 @@ import {
 const navItems = [
   { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
   { name: "Portfolio", path: "/portfolio", icon: PieChart },
-  { name: "News", path: "/showcase", icon: Newspaper },
+  { name: "News", path: "/news", icon: Newspaper },
   { name: "Account", path: "/account", icon: User },
   { name: "Support", path: "/support", icon: LifeBuoy },
 ];

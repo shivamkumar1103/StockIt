@@ -22,10 +22,7 @@ const NewsCard = ({ news }) => {
           />
         )}
         <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        {/* Category Badge */}
-        <div className="absolute top-3 left-3 bg-white/20 backdrop-blur-md text-white text-xs font-semibold px-2.5 py-1 rounded-lg">
-          {news.category}
-        </div>
+
       </div>
 
       {/* Content */}
