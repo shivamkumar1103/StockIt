@@ -15,6 +15,7 @@ const NewsSection = ({ category }) => {
   const [width, setWidth] = useState(0);
   const carousel = useRef();
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const items = newsData?.data.slice(0, 20) || [];
 
   useEffect(() => {

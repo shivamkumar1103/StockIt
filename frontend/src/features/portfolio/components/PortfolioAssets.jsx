@@ -20,7 +20,7 @@ export default function PortfolioAssets({ stocks }) {
             drag="x"
             dragConstraints={scrollRef}
             dragElastic={0.35}
-            className="flex gap-4 h-full"
+            className="flex gap-4 h-full w-max pr-6"
           >
             {stocks.length === 0 ? (
               <div className="w-full text-center text-gray-400 py-8">

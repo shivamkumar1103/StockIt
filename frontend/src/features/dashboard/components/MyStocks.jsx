@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import StockCard from "@/components/StockCard";
 import { motion } from "framer-motion";
@@ -7,6 +7,7 @@ const colors = ["blue", "mint", "yellow", "purple"];
 
 const MyStocks = ({ stocks }) => {
   const scrollRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   if (!stocks || stocks.length === 0) {
     return <div>No stocks available.</div>;
@@ -23,7 +24,9 @@ const MyStocks = ({ stocks }) => {
             drag="x"
             dragConstraints={scrollRef}
             dragElastic={0.35}
-            className="flex gap-4"
+            onDragStart={() => setIsDragging(true)}
+            onDragEnd={() => setTimeout(() => setIsDragging(false), 50)}
+            className="flex gap-4 w-max pr-6"
           >
             {stocks.map((stock, idx) => (
               <Link
@@ -31,11 +34,18 @@ const MyStocks = ({ stocks }) => {
                 to={`/stocks/${stock.symbol}`}
                 className="snap-start shrink-0 no-underline"
                 draggable={false}
+                onClick={(e) => {
+                  if (isDragging) {
+                    e.preventDefault();
+                  }
+                }}
               >
                 <StockCard
+                  key={stock.symbol}
                   name={stock.symbol}
                   ticker={stock.symbol}
                   value={stock.currentPrice}
+                  quantity={stock.quantity}
                   averagePrice={stock.averagePrice}
                   color={colors[idx % colors.length]}
                 />
