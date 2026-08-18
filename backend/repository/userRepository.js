@@ -41,3 +41,7 @@ export const deleteById = async (id) => {
 export const save = async (user, options = {}) => {
   return await user.save(options);
 };
+
+export const findByIdAndUpdate = async (id, updateData, options = {}) => {
+  return await User.findByIdAndUpdate(id, updateData, options);
+};

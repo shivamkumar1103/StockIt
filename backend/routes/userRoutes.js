@@ -1,5 +1,10 @@
 import express from "express";
 import * as authController from "../controllers/authController.js";
+import * as userController from "../controllers/userController.js";
+import {
+  uploadUserPhoto,
+  resizeUserPhoto,
+} from "../middleware/uploadMiddleware.js";
 
 const router = express.Router();
 
@@ -14,8 +19,12 @@ router
 
 router.use(authController.protect);
 
-router.route("/updateMyPassword").patch(authController.updatePassword);
+router.route("/updateMyPassword").patch(userController.updatePassword);
 router.route("/logout").post(authController.logout);
-router.route("/me").get(authController.getMe);
+router.route("/me").get(userController.getMe);
+router
+  .route("/updateMe")
+  .patch(uploadUserPhoto, resizeUserPhoto, userController.updateUser);
+router.route("/deleteMe").delete(userController.deleteUser);
 
 export default router;

@@ -78,13 +78,6 @@ export const restrictTo =
     next();
   };
 
-export const getMe = async (req, res) => {
-  res.status(200).json({
-    status: "success",
-    data: req.user,
-  });
-};
-
 export const forgotPassword = async (req, res, next) => {
   if (!req.body.email) {
     return next(new AppError("Please provide your email address.", 400));
@@ -103,34 +96,6 @@ export const resetPassword = async (req, res) => {
     req.params.token,
     req.body.password,
     req.body.passwordConfirm,
-  );
-
-  res.cookie("jwt", token, cookieOptions);
-  res.status(200).json({
-    status: "success",
-    data: user,
-  });
-};
-
-export const updatePassword = async (req, res, next) => {
-  if (
-    !req.body.currentPassword ||
-    !req.body.newPassword ||
-    !req.body.newPasswordConfirm
-  ) {
-    return next(
-      new AppError(
-        "Please provide current password, new password and confirm new password.",
-        400,
-      ),
-    );
-  }
-
-  const { token, cookieOptions, user } = await authService.updatePassword(
-    req.user._id,
-    req.body.currentPassword,
-    req.body.newPassword,
-    req.body.newPasswordConfirm,
   );
 
   res.cookie("jwt", token, cookieOptions);

@@ -4,27 +4,7 @@ import crypto from "crypto";
 import * as userRepository from "../repository/userRepository.js";
 import AppError from "../utils/appError.js";
 import Email from "../utils/email.js";
-
-const signToken = (id) =>
-  jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
-  });
-
-const createTokenPayload = (user) => {
-  const token = signToken(user._id);
-  user.password = undefined;
-
-  const cookieOptions = {
-    expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
-    ),
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
-  };
-
-  return { token, cookieOptions, user };
-};
+import createTokenPayload from "../utils/createTokenPayload.js";
 
 const sendVerificationEmail = async (user, protocol) => {
   const verificationToken = user.createEmailVerificationToken();
@@ -77,6 +57,7 @@ export const login = async (email, password) => {
 export const verifyJwt = async (token) => {
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
+  // check user was deleted after the token was issued
   const currentUser = await userRepository.findById(decoded.id);
   if (!currentUser) {
     throw new AppError(
@@ -85,6 +66,7 @@ export const verifyJwt = async (token) => {
     );
   }
 
+  // check if user changed password after the token was issued
   if (currentUser.changedPasswordAfter(decoded.iat)) {
     throw new AppError(
       "User recently changed password! Please log in again.",
@@ -131,25 +113,6 @@ export const resetPassword = async (token, password, passwordConfirm) => {
   user.passwordConfirm = passwordConfirm;
   user.passwordResetToken = undefined;
   user.passwordResetExpires = undefined;
-  await userRepository.save(user);
-
-  return createTokenPayload(user);
-};
-
-export const updatePassword = async (
-  userId,
-  currentPassword,
-  newPassword,
-  newPasswordConfirm,
-) => {
-  const user = await userRepository.findByIdWithPassword(userId);
-
-  if (!(await user.correctPassword(currentPassword, user.password))) {
-    throw new AppError("Your current password is incorrect.", 401);
-  }
-
-  user.password = newPassword;
-  user.passwordConfirm = newPasswordConfirm;
   await userRepository.save(user);
 
   return createTokenPayload(user);
