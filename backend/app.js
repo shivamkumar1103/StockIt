@@ -1,5 +1,7 @@
 import express from "express";
 import morgan from "morgan";
+import path from "path";
+import { fileURLToPath } from "url";
 import AppError from "./utils/appError.js";
 import userRouter from "./routes/userRoutes.js";
 import stockRouter from "./routes/stockRoutes.js";
@@ -16,6 +18,11 @@ const app = express();
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
   cors({

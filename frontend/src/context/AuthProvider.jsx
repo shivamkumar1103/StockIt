@@ -1,6 +1,6 @@
 import { AuthContext } from "./AuthContext";
-import useLogout from "../hooks/useLogout";
-import { useUser } from "../hooks/useUser";
+import useLogout from "../features/auth/hooks/useLogout";
+import { useUser } from "../features/auth/hooks/useUser";
 
 function AuthProvider({ children }) {
   //1 ) get user

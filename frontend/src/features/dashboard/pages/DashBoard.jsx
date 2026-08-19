@@ -5,6 +5,7 @@ import Watchlist from "../components/Watchlist";
 import TrendingNews from "../components/TrendingNews";
 import { useHomeData } from "../hooks/useHomeData";
 import usePortfolio from "../hooks/usePortfolio";
+import useUser from "../../../hooks/useAuth";
 
 function DashBoard() {
   const {
@@ -17,6 +18,8 @@ function DashBoard() {
     isPending: isPortfolioPending,
     isError: isPortfolioError,
   } = usePortfolio();
+  const { user } = useUser();
+  const name = user.data?.name || "User";
 
   if (isHomePending || isPortfolioPending) {
     return (
@@ -52,7 +55,7 @@ function DashBoard() {
     <div className="flex flex-col gap-8">
       {/* Greeting Header */}
       <div>
-        <h1 className="text-2xl font-bold text-[#333333]">Hello Matt,</h1>
+        <h1 className="text-2xl font-bold text-[#333333]">Hello {name},</h1>
         <p className="text-sm text-gray-400 mt-1">
           Welcome back! Here's your portfolio overview.
         </p>

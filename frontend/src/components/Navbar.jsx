@@ -1,7 +1,9 @@
 import { Moon } from "lucide-react";
 import SearchBar from "../features/search/components/SearchBar";
+import { useUser } from "../features/auth/hooks/useUser";
 
 export default function Navbar() {
+  const { user } = useUser();
   return (
     <header className="h-18 bg-white border-b border-[#F3F0FA] flex items-center justify-between px-8 w-full shrink-0 z-10 shadow-sm">
       <div className="flex items-center gap-16">
@@ -20,8 +22,8 @@ export default function Navbar() {
 
         <button className="w-10 h-10 rounded-full overflow-hidden border border-gray-200 focus:ring-2 focus:ring-[#6425FE] focus:outline-none">
           <img
-            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-            alt="Matt"
+            src={`http://localhost:3000/img/users/avatars/${user.data?.photo}`}
+            alt={user.data?.name || "User"}
             className="w-full h-full object-cover"
           />
         </button>
