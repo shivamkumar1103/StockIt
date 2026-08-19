@@ -5,7 +5,9 @@ import {
   Newspaper,
   User,
   LifeBuoy,
+  LogOut,
 } from "lucide-react";
+import useAuth from "../hooks/useAuth";
 
 const navItems = [
   { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
@@ -17,9 +19,11 @@ const navItems = [
 
 export default function Sidebar() {
   const location = useLocation();
+  const { logout, isLoggingOut } = useAuth() || {};
 
   return (
-    <aside className="w-70 h-full bg-white border-r border-[#F3F0FA] text-[#333333] flex flex-col justify-center font-sans tracking-wide shrink-0 z-0">
+    <aside className="w-70 h-full bg-white border-r border-[#F3F0FA] text-[#333333] flex flex-col justify-between py-10 font-sans tracking-wide shrink-0 z-0">
+      {/* Primary Navigation */}
       <nav className="flex flex-col gap-6 w-fit mx-auto self-center">
         {navItems.map((item) => {
           const isActive = location.pathname.startsWith(item.path);
@@ -45,7 +49,11 @@ export default function Sidebar() {
 
               {/* Icon instead of ID */}
               <div
-                className={`mr-4 transition-opacity ${isActive ? "opacity-100 text-[#6425FE]" : "opacity-60 text-gray-400 group-hover:text-[#6425FE]"}`}
+                className={`mr-4 transition-opacity ${
+                  isActive
+                    ? "opacity-100 text-[#6425FE]"
+                    : "opacity-60 text-gray-400 group-hover:text-[#6425FE]"
+                }`}
               >
                 <Icon size={20} />
               </div>
@@ -58,6 +66,29 @@ export default function Sidebar() {
           );
         })}
       </nav>
+
+      {/* Logout Action */}
+      <div className="w-fit mx-auto self-center">
+        <button
+          onClick={() => logout && logout()}
+          disabled={isLoggingOut}
+          className="flex items-center group transition-colors duration-300 text-gray-500 hover:text-red-500 cursor-pointer disabled:opacity-50"
+        >
+          {/* Line indicator */}
+          <div className="h-px transition-all duration-300 mr-5 bg-gray-300 w-8 group-hover:w-12 group-hover:bg-red-500" />
+
+          {/* Icon */}
+          <div className="mr-4 transition-opacity opacity-60 text-gray-400 group-hover:text-red-500">
+            <LogOut size={20} />
+          </div>
+
+          {/* Label */}
+          <span className="text-[17px] font-medium tracking-wide">
+            {isLoggingOut ? "Logging out..." : "Logout"}
+          </span>
+        </button>
+      </div>
     </aside>
   );
 }
+

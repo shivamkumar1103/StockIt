@@ -7,7 +7,7 @@ import Dashboard from "../features/dashboard/pages/DashBoard";
 import Portfolio from "../features/portfolio/pages/Portfolio";
 import StockDetail from "../features/stockDetail/pages/StockDetail";
 import News from "../features/news/pages/News";
-import Settings from "../pages/Settings";
+import Settings from "../features/account/pages/Settings";
 import Layout from "../layouts/Layout";
 import "./App.css";
 
@@ -25,10 +25,9 @@ function App() {
               {/* All routes nested inside here require an authenticated session */}
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="portfolio" element={<Portfolio />} />
-              <Route path="settings" element={<Settings />} />
               <Route path="stocks/:symbol" element={<StockDetail />} />
               <Route path="news" element={<News />} />
-
+              <Route path="account" element={<Settings />} />
               {/* Additional layout routes can be added here */}
             </Route>
 
