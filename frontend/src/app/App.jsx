@@ -8,6 +8,7 @@ import Portfolio from "../features/portfolio/pages/Portfolio";
 import StockDetail from "../features/stockDetail/pages/StockDetail";
 import News from "../features/news/pages/News";
 import Settings from "../features/account/pages/Settings";
+import Support from "../features/support/pages/Support";
 import Layout from "../layouts/Layout";
 import "./App.css";
 
@@ -28,6 +29,7 @@ function App() {
               <Route path="stocks/:symbol" element={<StockDetail />} />
               <Route path="news" element={<News />} />
               <Route path="account" element={<Settings />} />
+              <Route path="support" element={<Support />} />
               {/* Additional layout routes can be added here */}
             </Route>
 
