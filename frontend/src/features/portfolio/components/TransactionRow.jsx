@@ -26,14 +26,16 @@ export function TransactionRow({ tx }) {
             <div className="font-semibold text-foreground capitalize">
               {tx.type}
             </div>
-            <div className="text-muted-foreground text-xs truncate max-w-[180px]">
+            <div className="text-muted-foreground text-xs truncate max-w-45">
               {tx.description || new Date(tx.createdAt).toLocaleString()}
             </div>
           </div>
         </div>
       </TableCell>
 
-      <TableCell className={`text-right font-medium text-sm capitalize ${colorMap[type] || "text-muted-foreground"}`}>
+      <TableCell
+        className={`text-right font-medium text-sm capitalize ${colorMap[type] || "text-muted-foreground"}`}
+      >
         {tx.type}
       </TableCell>
 

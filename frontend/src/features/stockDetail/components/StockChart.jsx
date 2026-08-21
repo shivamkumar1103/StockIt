@@ -21,7 +21,7 @@ const CustomTooltip = ({ active, payload, isIntraday }) => {
   const dateDisplay = formatTooltipDate(data.datetime, isIntraday);
 
   return (
-    <div className="bg-popover text-popover-foreground rounded-xl px-4 py-3 shadow-md border border-border text-sm min-w-[12rem]">
+    <div className="bg-popover text-popover-foreground rounded-xl px-4 py-3 shadow-md border border-border text-sm min-w-48">
       <p className="font-bold text-muted-foreground mb-2 text-xs tracking-wider uppercase">
         {dateDisplay}
       </p>
@@ -95,14 +95,18 @@ const StockChart = ({ values = [], isLoading, isIntraday = false }) => {
 
           <CartesianGrid
             strokeDasharray="3 3"
-            stroke="hsl(var(--border))"
+            stroke="var(--border)"
             vertical={false}
           />
 
           <XAxis
             dataKey="datetime"
             tickFormatter={(val) => formatDateLabel(val, isIntraday)}
-            tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))", fontWeight: 500 }}
+            tick={{
+              fontSize: 12,
+              fill: "var(--muted-foreground)",
+              fontWeight: 500,
+            }}
             axisLine={false}
             tickLine={false}
             dy={10}
@@ -113,7 +117,11 @@ const StockChart = ({ values = [], isLoading, isIntraday = false }) => {
           <YAxis
             domain={[domainMin, domainMax]}
             tickFormatter={(val) => `$${val.toFixed(0)}`}
-            tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))", fontWeight: 500 }}
+            tick={{
+              fontSize: 12,
+              fill: "var(--muted-foreground)",
+              fontWeight: 500,
+            }}
             axisLine={false}
             tickLine={false}
             dx={-5}
@@ -123,7 +131,7 @@ const StockChart = ({ values = [], isLoading, isIntraday = false }) => {
           <Tooltip
             content={<CustomTooltip isIntraday={isIntraday} />}
             cursor={{
-              stroke: "hsl(var(--primary))",
+              stroke: "var(--primary)",
               strokeWidth: 1,
               strokeDasharray: "4 4",
             }}
@@ -139,7 +147,7 @@ const StockChart = ({ values = [], isLoading, isIntraday = false }) => {
             activeDot={{
               r: 5,
               fill: strokeColor,
-              stroke: "hsl(var(--background))",
+              stroke: "var(--background)",
               strokeWidth: 2,
             }}
           />
