@@ -1,5 +1,11 @@
 import { useState } from "react";
 import { useBuyStock, useSellStock } from "../hooks/useTrade";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 const TradeWidget = ({ symbol, quoteResponse, isQuoteLoading }) => {
   const currentPrice = quoteResponse?.data?.currentPrice || 0;
@@ -43,96 +49,78 @@ const TradeWidget = ({ symbol, quoteResponse, isQuoteLoading }) => {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm flex flex-col h-full">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">
-        Trade {symbol}
-      </h3>
+    <Card className="flex flex-col h-full shadow-sm">
+      <CardHeader>
+        <CardTitle className="text-xl">Trade {symbol}</CardTitle>
+      </CardHeader>
+      <CardContent className="flex flex-col grow">
+        <Tabs value={tradeType} onValueChange={setTradeType} className="mb-6">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="buy">Buy</TabsTrigger>
+            <TabsTrigger value="sell">Sell</TabsTrigger>
+          </TabsList>
+        </Tabs>
 
-      {/* Trade Type Toggle */}
-      <div className="flex bg-gray-100 rounded-xl p-1 mb-6">
-        <button
-          className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors ${
-            tradeType === "buy"
-              ? "bg-white text-[#6425FE] shadow-sm"
-              : "text-gray-500 hover:text-gray-900"
-          }`}
-          onClick={() => setTradeType("buy")}
-        >
-          Buy
-        </button>
-        <button
-          className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors ${
-            tradeType === "sell"
-              ? "bg-white text-red-500 shadow-sm"
-              : "text-gray-500 hover:text-gray-900"
-          }`}
-          onClick={() => setTradeType("sell")}
-        >
-          Sell
-        </button>
-      </div>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6 grow">
+          {/* Order Type */}
+          <div className="flex justify-between items-center text-sm">
+            <span className="text-muted-foreground">Order Type</span>
+            <span className="font-medium text-foreground">Market Order</span>
+          </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-6 grow">
-        {/* Order Type */}
-        <div className="flex justify-between items-center text-sm">
-          <span className="text-gray-500">Order Type</span>
-          <span className="font-medium text-gray-900">Market Order</span>
-        </div>
-
-        {/* Shares Input */}
-        <div className="flex flex-col gap-2">
-          <label htmlFor="quantity" className="text-sm text-gray-500">
-            Shares
-          </label>
-          <div className="relative">
-            <input
+          {/* Shares Input */}
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="quantity" className="text-muted-foreground">
+              Shares
+            </Label>
+            <Input
               id="quantity"
               type="text"
               value={quantity}
               onChange={handleQuantityChange}
               placeholder="0"
-              className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 px-4 text-right text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#6425FE]/20 focus:border-[#6425FE] transition-all"
+              className="text-right text-lg font-medium"
             />
           </div>
-        </div>
 
-        {/* Current Price */}
-        <div className="flex justify-between items-center text-sm">
-          <span className="text-gray-500">Market Price</span>
-          <span className="font-medium text-gray-900">
-            ${currentPrice.toFixed(2)}
-          </span>
-        </div>
+          {/* Current Price */}
+          <div className="flex justify-between items-center text-sm">
+            <span className="text-muted-foreground">Market Price</span>
+            <span className="font-medium text-foreground">
+              ${currentPrice.toFixed(2)}
+            </span>
+          </div>
 
-        <hr className="border-gray-100" />
+          <Separator />
 
-        {/* Estimated Total */}
-        <div className="flex justify-between items-center">
-          <span className="text-sm font-medium text-gray-900">
-            Estimated Total
-          </span>
-          <span className="text-lg font-bold text-gray-900">
-            ${estimatedTotal}
-          </span>
-        </div>
+          {/* Estimated Total */}
+          <div className="flex justify-between items-center">
+            <span className="text-sm font-medium text-muted-foreground">
+              Estimated Total
+            </span>
+            <span className="text-xl font-bold text-foreground">
+              ${estimatedTotal}
+            </span>
+          </div>
 
-        <div className="mt-auto pt-4">
-          <button
-            type="submit"
-            disabled={isPending || !quantity || parseInt(quantity) <= 0}
-            className={`w-full py-3.5 rounded-xl text-white font-medium transition-all ${
-              tradeType === "buy"
-                ? "bg-[#6425FE] hover:bg-[#6425FE]/90"
-                : "bg-red-500 hover:bg-red-600"
-            } disabled:opacity-50 disabled:cursor-not-allowed`}
-          >
-            {isPending
-              ? "Processing..."
-              : `${tradeType === "buy" ? "Buy" : "Sell"} ${symbol}`}
-          </button>
-        </div>
-      </form>
-    </div>
+          <div className="mt-auto pt-6">
+            <Button
+              type="submit"
+              disabled={isPending || !quantity || parseInt(quantity) <= 0}
+              className={`w-full py-6 text-lg font-bold transition-all ${
+                tradeType === "buy"
+                  ? "bg-primary hover:bg-primary/90 text-primary-foreground"
+                  : "bg-red-600 hover:bg-red-700 text-white dark:bg-red-700 dark:hover:bg-red-800"
+              }`}
+            >
+              {isPending
+                ? "Processing..."
+                : `${tradeType === "buy" ? "Buy" : "Sell"} ${symbol}`}
+            </Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
 

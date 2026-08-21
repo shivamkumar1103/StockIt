@@ -1,6 +1,7 @@
 import { useUser } from "../../auth/hooks/useUser";
 import ProfileFormInner from "./ProfileFormInner";
 import { Loader2 } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function ProfileForm() {
   const { user, isPending } = useUser();
@@ -8,10 +9,12 @@ export default function ProfileForm() {
 
   if (isPending) {
     return (
-      <div className="bg-white rounded-2xl border border-gray-100 p-8 flex justify-center items-center py-16 text-gray-400 gap-2 font-medium shadow-sm">
-        <Loader2 className="w-5 h-5 animate-spin text-[#6425FE]" />
-        <span>Loading profile details...</span>
-      </div>
+      <Card>
+        <CardContent className="flex justify-center items-center py-16 text-muted-foreground gap-2 font-medium">
+          <Loader2 className="w-5 h-5 animate-spin text-primary" />
+          <span>Loading profile details...</span>
+        </CardContent>
+      </Card>
     );
   }
 

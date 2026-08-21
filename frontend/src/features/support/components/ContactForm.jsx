@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { Send, MessageSquare, CheckCircle2 } from "lucide-react";
 import toast from "react-hot-toast";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -48,157 +53,129 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-6 md:p-8 flex flex-col gap-6 shadow-sm">
-      <div className="flex items-center gap-3 pb-2 border-b border-gray-100">
-        <div className="p-2.5 rounded-xl bg-[#F3F0FA] text-[#6425FE]">
+    <Card>
+      <CardHeader className="flex flex-row items-center gap-4 space-y-0 pb-6 border-b border-border">
+        <div className="p-2.5 rounded-xl bg-muted text-primary">
           <MessageSquare size={22} />
         </div>
-        <div>
-          <h3 className="text-lg font-bold text-[#333333]">Send Us a Message</h3>
-          <p className="text-xs text-gray-400 mt-0.5">
+        <div className="flex-1">
+          <CardTitle className="text-lg">Send Us a Message</CardTitle>
+          <CardDescription>
             Can't find what you're looking for? Leave a note and our Gurugram team will respond promptly.
-          </p>
+          </CardDescription>
         </div>
-      </div>
-
-      {isSubmitted ? (
-        <div className="bg-[#F8F9FA] rounded-2xl p-8 text-center flex flex-col items-center gap-3 border border-emerald-100">
-          <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">
-            <CheckCircle2 size={28} />
-          </div>
-          <h4 className="text-base font-bold text-[#333333]">Message Received!</h4>
-          <p className="text-xs text-gray-500 max-w-md">
-            Thank you for contacting StockIt Support. We will review your query and get back to you at <strong>{formData.email}</strong> shortly.
-          </p>
-          <button
-            type="button"
-            onClick={handleReset}
-            className="mt-2 text-xs font-semibold text-[#6425FE] hover:underline cursor-pointer"
-          >
-            Send another message
-          </button>
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {/* Full Name */}
-            <div>
-              <label
-                htmlFor="support-name"
-                className="block text-xs font-semibold uppercase tracking-wider text-[#333333]/70 mb-2"
-              >
-                Your Name <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="support-name"
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="e.g. Rahul Sharma"
-                required
-                className="w-full bg-[#F8F9FA] border border-gray-200 rounded-xl py-3 px-4 text-[#333333] placeholder-gray-400 font-medium focus:outline-none focus:ring-2 focus:ring-[#6425FE]/20 focus:border-[#6425FE] focus:bg-white transition-all text-sm"
-              />
+      </CardHeader>
+      <CardContent className="pt-6">
+        {isSubmitted ? (
+          <div className="bg-muted/30 rounded-xl p-8 text-center flex flex-col items-center gap-3 border border-emerald-100 dark:border-emerald-900/30">
+            <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+              <CheckCircle2 size={28} />
             </div>
-
-            {/* Email Address */}
-            <div>
-              <label
-                htmlFor="support-email"
-                className="block text-xs font-semibold uppercase tracking-wider text-[#333333]/70 mb-2"
-              >
-                Email Address <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="support-email"
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="e.g. rahul@example.com"
-                required
-                className="w-full bg-[#F8F9FA] border border-gray-200 rounded-xl py-3 px-4 text-[#333333] placeholder-gray-400 font-medium focus:outline-none focus:ring-2 focus:ring-[#6425FE]/20 focus:border-[#6425FE] focus:bg-white transition-all text-sm"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {/* Category */}
-            <div>
-              <label
-                htmlFor="support-category"
-                className="block text-xs font-semibold uppercase tracking-wider text-[#333333]/70 mb-2"
-              >
-                Topic Category
-              </label>
-              <select
-                id="support-category"
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
-                className="w-full bg-[#F8F9FA] border border-gray-200 rounded-xl py-3 px-4 text-[#333333] font-medium focus:outline-none focus:ring-2 focus:ring-[#6425FE]/20 focus:border-[#6425FE] focus:bg-white transition-all text-sm cursor-pointer"
-              >
-                <option value="General Inquiry">General Inquiry</option>
-                <option value="Account & KYC">Account & KYC Verification</option>
-                <option value="Trading & Orders">Trading & Orders</option>
-                <option value="Deposits & Withdrawals">Deposits & Withdrawals</option>
-                <option value="Technical Issue">Technical Issue</option>
-              </select>
-            </div>
-
-            {/* Subject */}
-            <div>
-              <label
-                htmlFor="support-subject"
-                className="block text-xs font-semibold uppercase tracking-wider text-[#333333]/70 mb-2"
-              >
-                Subject
-              </label>
-              <input
-                id="support-subject"
-                type="text"
-                name="subject"
-                value={formData.subject}
-                onChange={handleChange}
-                placeholder="Brief summary of your query"
-                className="w-full bg-[#F8F9FA] border border-gray-200 rounded-xl py-3 px-4 text-[#333333] placeholder-gray-400 font-medium focus:outline-none focus:ring-2 focus:ring-[#6425FE]/20 focus:border-[#6425FE] focus:bg-white transition-all text-sm"
-              />
-            </div>
-          </div>
-
-          {/* Message */}
-          <div>
-            <label
-              htmlFor="support-message"
-              className="block text-xs font-semibold uppercase tracking-wider text-[#333333]/70 mb-2"
+            <h4 className="text-base font-bold text-foreground">Message Received!</h4>
+            <p className="text-sm text-muted-foreground max-w-md">
+              Thank you for contacting StockIt Support. We will review your query and get back to you at <strong>{formData.email}</strong> shortly.
+            </p>
+            <Button
+              variant="link"
+              onClick={handleReset}
+              className="mt-2 text-primary"
             >
-              Message <span className="text-red-500">*</span>
-            </label>
-            <textarea
-              id="support-message"
-              name="message"
-              rows={4}
-              value={formData.message}
-              onChange={handleChange}
-              placeholder="Describe your issue or question in detail..."
-              required
-              className="w-full bg-[#F8F9FA] border border-gray-200 rounded-xl py-3 px-4 text-[#333333] placeholder-gray-400 font-medium focus:outline-none focus:ring-2 focus:ring-[#6425FE]/20 focus:border-[#6425FE] focus:bg-white transition-all text-sm resize-none"
-            />
+              Send another message
+            </Button>
           </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="support-name">
+                  Your Name <span className="text-destructive">*</span>
+                </Label>
+                <Input
+                  id="support-name"
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="e.g. Rahul Sharma"
+                  required
+                />
+              </div>
 
-          {/* Submit button */}
-          <div className="flex justify-end pt-2">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="bg-[#6425FE] hover:bg-[#6425FE]/90 text-white font-semibold text-sm px-6 py-3 rounded-xl shadow-sm hover:shadow-md hover:shadow-[#6425FE]/25 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-            >
-              <Send size={16} />
-              <span>{isSubmitting ? "Sending..." : "Send Message"}</span>
-            </button>
-          </div>
-        </form>
-      )}
-    </div>
+              <div className="space-y-2">
+                <Label htmlFor="support-email">
+                  Email Address <span className="text-destructive">*</span>
+                </Label>
+                <Input
+                  id="support-email"
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="e.g. rahul@example.com"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="support-category">Topic Category</Label>
+                <select
+                  id="support-category"
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <option value="General Inquiry">General Inquiry</option>
+                  <option value="Account & KYC">Account & KYC Verification</option>
+                  <option value="Trading & Orders">Trading & Orders</option>
+                  <option value="Deposits & Withdrawals">Deposits & Withdrawals</option>
+                  <option value="Technical Issue">Technical Issue</option>
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="support-subject">Subject</Label>
+                <Input
+                  id="support-subject"
+                  type="text"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  placeholder="Brief summary of your query"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="support-message">
+                Message <span className="text-destructive">*</span>
+              </Label>
+              <Textarea
+                id="support-message"
+                name="message"
+                rows={4}
+                value={formData.message}
+                onChange={handleChange}
+                placeholder="Describe your issue or question in detail..."
+                required
+              />
+            </div>
+
+            <div className="flex justify-end pt-2">
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="gap-2"
+              >
+                <Send size={16} />
+                <span>{isSubmitting ? "Sending..." : "Send Message"}</span>
+              </Button>
+            </div>
+          </form>
+        )}
+      </CardContent>
+    </Card>
   );
 }

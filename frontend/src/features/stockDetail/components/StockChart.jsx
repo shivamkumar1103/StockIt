@@ -21,28 +21,28 @@ const CustomTooltip = ({ active, payload, isIntraday }) => {
   const dateDisplay = formatTooltipDate(data.datetime, isIntraday);
 
   return (
-    <div className="bg-[#1a1a2e] text-white rounded-xl px-4 py-3 shadow-2xl border border-white/10 text-sm min-w-45">
-      <p className="font-bold text-white/90 mb-2 text-xs tracking-wider uppercase">
+    <div className="bg-popover text-popover-foreground rounded-xl px-4 py-3 shadow-md border border-border text-sm min-w-[12rem]">
+      <p className="font-bold text-muted-foreground mb-2 text-xs tracking-wider uppercase">
         {dateDisplay}
       </p>
       <div className="grid grid-cols-2 gap-x-6 gap-y-1.5">
-        <span className="text-white/50">Open</span>
+        <span className="text-muted-foreground">Open</span>
         <span className="font-semibold text-right">
           ${data.open?.toFixed(2)}
         </span>
-        <span className="text-white/50">Close</span>
+        <span className="text-muted-foreground">Close</span>
         <span className="font-semibold text-right">
           ${data.close?.toFixed(2)}
         </span>
-        <span className="text-white/50">High</span>
+        <span className="text-muted-foreground">High</span>
         <span className="font-semibold text-right">
           ${data.high?.toFixed(2)}
         </span>
-        <span className="text-white/50">Low</span>
+        <span className="text-muted-foreground">Low</span>
         <span className="font-semibold text-right">
           ${data.low?.toFixed(2)}
         </span>
-        <span className="text-white/50">Volume</span>
+        <span className="text-muted-foreground">Volume</span>
         <span className="font-semibold text-right">
           {formatVolume(data.volume)}
         </span>
@@ -54,8 +54,8 @@ const CustomTooltip = ({ active, payload, isIntraday }) => {
 const StockChart = ({ values = [], isLoading, isIntraday = false }) => {
   if (isLoading) {
     return (
-      <div className="w-full h-80 bg-gray-50 rounded-2xl animate-pulse flex items-center justify-center">
-        <span className="text-gray-400 text-sm font-medium">
+      <div className="w-full h-80 bg-muted/50 rounded-xl animate-pulse flex items-center justify-center">
+        <span className="text-muted-foreground text-sm font-medium">
           Loading chart...
         </span>
       </div>
@@ -64,8 +64,8 @@ const StockChart = ({ values = [], isLoading, isIntraday = false }) => {
 
   if (!values.length) {
     return (
-      <div className="w-full h-80 bg-gray-50 rounded-2xl flex items-center justify-center">
-        <span className="text-gray-400 text-sm font-medium">
+      <div className="w-full h-80 bg-muted/20 rounded-xl flex items-center justify-center">
+        <span className="text-muted-foreground text-sm font-medium">
           No chart data available
         </span>
       </div>
@@ -89,20 +89,20 @@ const StockChart = ({ values = [], isLoading, isIntraday = false }) => {
           <defs>
             <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor={strokeColor} stopOpacity={0.3} />
-              <stop offset="100%" stopColor={strokeColor} stopOpacity={0.02} />
+              <stop offset="100%" stopColor={strokeColor} stopOpacity={0.0} />
             </linearGradient>
           </defs>
 
           <CartesianGrid
             strokeDasharray="3 3"
-            stroke="#F3F4F6"
+            stroke="hsl(var(--border))"
             vertical={false}
           />
 
           <XAxis
             dataKey="datetime"
             tickFormatter={(val) => formatDateLabel(val, isIntraday)}
-            tick={{ fontSize: 12, fill: "#9CA3AF", fontWeight: 500 }}
+            tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))", fontWeight: 500 }}
             axisLine={false}
             tickLine={false}
             dy={10}
@@ -113,7 +113,7 @@ const StockChart = ({ values = [], isLoading, isIntraday = false }) => {
           <YAxis
             domain={[domainMin, domainMax]}
             tickFormatter={(val) => `$${val.toFixed(0)}`}
-            tick={{ fontSize: 12, fill: "#9CA3AF", fontWeight: 500 }}
+            tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))", fontWeight: 500 }}
             axisLine={false}
             tickLine={false}
             dx={-5}
@@ -123,7 +123,7 @@ const StockChart = ({ values = [], isLoading, isIntraday = false }) => {
           <Tooltip
             content={<CustomTooltip isIntraday={isIntraday} />}
             cursor={{
-              stroke: "#6425FE",
+              stroke: "hsl(var(--primary))",
               strokeWidth: 1,
               strokeDasharray: "4 4",
             }}
@@ -139,7 +139,7 @@ const StockChart = ({ values = [], isLoading, isIntraday = false }) => {
             activeDot={{
               r: 5,
               fill: strokeColor,
-              stroke: "#fff",
+              stroke: "hsl(var(--background))",
               strokeWidth: 2,
             }}
           />

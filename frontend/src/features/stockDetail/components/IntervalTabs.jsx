@@ -1,3 +1,5 @@
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 const INTERVALS = [
   { label: "1D", interval: "5min", outputsize: 78 }, // ~6.5 market hours × 12 per hour
   { label: "5D", interval: "30min", outputsize: 65 }, // 5 days × 13 per day
@@ -8,21 +10,18 @@ const INTERVALS = [
 
 const IntervalTabs = ({ activeInterval, onIntervalChange }) => {
   return (
-    <div className="flex items-center gap-1 bg-gray-50/80 p-1.5 rounded-xl border border-gray-100 w-fit">
-      {INTERVALS.map(({ label, interval, outputsize }) => (
-        <button
-          key={label}
-          onClick={() => onIntervalChange(interval, outputsize, label)}
-          className={`px-4 py-1.5 text-sm font-semibold rounded-lg transition-all duration-200 cursor-pointer ${
-            activeInterval === label
-              ? "bg-[#6425FE] text-white shadow-md"
-              : "text-gray-500 hover:text-[#6425FE] hover:bg-gray-100"
-          }`}
-        >
-          {label}
-        </button>
-      ))}
-    </div>
+    <Tabs value={activeInterval} onValueChange={(val) => {
+      const match = INTERVALS.find((i) => i.label === val);
+      if (match) onIntervalChange(match.interval, match.outputsize, match.label);
+    }}>
+      <TabsList className="grid w-full grid-cols-5 md:w-fit">
+        {INTERVALS.map(({ label }) => (
+          <TabsTrigger key={label} value={label}>
+            {label}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+    </Tabs>
   );
 };
 

@@ -1,40 +1,40 @@
 import { LifeBuoy, Clock, ShieldCheck, MapPin } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function SupportHeader() {
   return (
-    <div className="w-full flex flex-col gap-4">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 text-[#6425FE] font-semibold text-xs uppercase tracking-wider mb-1">
-            <LifeBuoy size={16} />
-            <span>Help & Support Center</span>
+    <Card className="overflow-hidden border-border bg-card">
+      <CardContent className="p-10 relative flex flex-col md:flex-row md:items-start justify-between gap-8">
+        <div className="max-w-2xl relative z-10">
+          <div className="flex items-center gap-3 text-primary text-sm uppercase tracking-wider font-semibold mb-4">
+            <LifeBuoy size={20} className="animate-pulse" />
+            <span>Support Center</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#333333]">
-            How can we help you today?
+          <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-4">
+            How can we help?
           </h1>
-          <p className="text-sm text-gray-500 mt-1 max-w-2xl">
+          <p className="text-base text-muted-foreground max-w-xl">
             Find answers to frequently asked questions about your trading account, orders, portfolio, or reach out directly to our Gurugram-based support team.
           </p>
         </div>
 
         {/* Quick Info Badges */}
-        <div className="flex flex-wrap items-center gap-2.5 sm:self-start">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F3F0FA] text-[#6425FE] text-xs font-medium border border-[#6425FE]/15">
-            <Clock size={13} />
+        <div className="flex flex-col sm:flex-row flex-wrap items-end gap-3 shrink-0 relative z-10">
+          <Badge variant="secondary" className="px-4 py-2 gap-2 text-xs font-semibold uppercase tracking-wider rounded-xl">
+            <Clock size={16} />
             <span>Fast Turnaround</span>
-          </span>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-medium border border-emerald-200">
-            <ShieldCheck size={13} />
-            <span>SEBI & Exchange Compliant</span>
-          </span>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100 text-gray-600 text-xs font-medium border border-gray-200">
-            <MapPin size={13} />
+          </Badge>
+          <Badge variant="outline" className="px-4 py-2 gap-2 text-xs font-semibold uppercase tracking-wider rounded-xl">
+            <ShieldCheck size={16} />
+            <span>SEBI Compliant</span>
+          </Badge>
+          <Badge variant="outline" className="px-4 py-2 gap-2 text-xs font-semibold uppercase tracking-wider rounded-xl">
+            <MapPin size={16} />
             <span>Gurugram, India</span>
-          </span>
+          </Badge>
         </div>
-      </div>
-
-      <hr className="border-gray-100 mt-2" />
-    </div>
+      </CardContent>
+    </Card>
   );
 }

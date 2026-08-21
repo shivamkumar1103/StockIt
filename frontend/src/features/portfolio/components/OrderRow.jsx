@@ -1,12 +1,17 @@
 import { ShoppingBag, ArrowLeftRight } from "lucide-react";
 import { formatCurrency } from "./formatters";
+import { TableCell, TableRow } from "@/components/ui/table";
 
 const statusStyles = {
-  pending: "bg-yellow-50 text-yellow-700",
-  executed: "bg-green-50 text-green-700",
-  cancelled: "bg-gray-100 text-gray-600",
-  rejected: "bg-red-50 text-red-700",
-  completed: "bg-green-50 text-green-700",
+  pending:
+    "bg-yellow-100 text-yellow-800 hover:bg-yellow-100 dark:bg-yellow-900/30 dark:text-yellow-400",
+  executed:
+    "bg-emerald-100 text-emerald-800 hover:bg-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-400",
+  cancelled: "bg-muted text-muted-foreground hover:bg-muted",
+  rejected:
+    "bg-red-100 text-red-800 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400",
+  completed:
+    "bg-emerald-100 text-emerald-800 hover:bg-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-400",
 };
 
 export function OrderRow({ order }) {
@@ -14,44 +19,46 @@ export function OrderRow({ order }) {
   const displayPrice = order.executedPrice ?? order.price ?? 0;
 
   return (
-    <div className="grid grid-cols-4 md:grid-cols-6 gap-4 py-4 items-center border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors px-2 -mx-2 rounded-lg">
-      <div className="col-span-2 md:col-span-2 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-400">
-          {isBuy ? <ShoppingBag size={18} /> : <ArrowLeftRight size={18} />}
-        </div>
-        <div>
-          <div className="font-semibold text-[#333333]">{order.symbol}</div>
-          <div className="text-gray-400 text-xs capitalize">
-            {order.type} order
+    <TableRow className="hover:bg-muted/50 transition-colors">
+      <TableCell>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground shrink-0">
+            {isBuy ? <ShoppingBag size={18} /> : <ArrowLeftRight size={18} />}
+          </div>
+          <div>
+            <div className="font-semibold text-foreground">{order.symbol}</div>
+            <div className="text-muted-foreground text-xs capitalize">
+              {order.type} order
+            </div>
           </div>
         </div>
-      </div>
+      </TableCell>
 
-      <div
+      <TableCell
         className={`text-right font-medium text-sm capitalize ${
-          isBuy ? "text-green-600" : "text-red-600"
+          isBuy
+            ? "text-emerald-600 dark:text-emerald-400"
+            : "text-red-600 dark:text-red-400"
         }`}
       >
         {order.side}
-      </div>
+      </TableCell>
 
-      <div className="text-right hidden md:block text-sm font-medium text-[#333333]">
+      <TableCell className="text-right hidden md:table-cell text-sm font-medium text-foreground">
         {displayPrice ? formatCurrency(displayPrice) : "—"}
-      </div>
+      </TableCell>
 
-      <div className="text-right hidden md:block text-sm text-gray-500">
+      <TableCell className="text-right hidden md:table-cell text-sm text-muted-foreground">
         {order.quantity}
-      </div>
+      </TableCell>
 
-      <div className="text-right flex justify-end">
+      <TableCell className="text-right">
         <span
-          className={`px-2.5 py-1 text-xs rounded-md font-medium capitalize ${
-            statusStyles[order.status] || "bg-gray-100 text-gray-600"
-          }`}
+          className={`inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-semibold capitalize ${statusStyles[order.status] || "bg-muted text-muted-foreground"}`}
         >
           {order.status}
         </span>
-      </div>
-    </div>
+      </TableCell>
+    </TableRow>
   );
 }

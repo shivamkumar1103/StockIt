@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import useForgotPassword from "../hooks/useForgotPassword";
-import "./Auth.css";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
-  const { forgotPassword, isPending /*isError, error, isSuccess */ } =
-    useForgotPassword();
+  const { forgotPassword, isPending } = useForgotPassword();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,31 +17,36 @@ function ForgotPassword() {
   };
 
   return (
-    <div className="auth-container">
-      <form onSubmit={handleSubmit} className="auth-form">
-        <h2>Reset Password</h2>
-
-        <p className="helper-text">
-          Enter your email and we'll send you a link to reset your password.
-        </p>
-        <div className="form-group">
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit" className="auth-button" disabled={isPending}>
-          Send Reset Link
-        </button>
-
-        <div className="auth-links">
-          <Link to="/login">Back to Login</Link>
-        </div>
-      </form>
+    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-bold">Reset Password</CardTitle>
+          <CardDescription>
+            Enter your email and we'll send you a link to reset your password.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="name@example.com"
+                required
+              />
+            </div>
+            <Button type="submit" className="w-full" disabled={isPending}>
+              {isPending ? "Sending..." : "Send Reset Link"}
+            </Button>
+            <div className="text-center text-sm text-muted-foreground mt-4">
+              <Link to="/auth/login" className="text-primary hover:underline">Back to Login</Link>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

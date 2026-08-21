@@ -8,6 +8,10 @@ import StockChart from "../components/StockChart";
 import StockStats from "../components/StockStats";
 import TradeWidget from "../components/TradeWidget";
 import useStockQuote from "../hooks/useStockQuote";
+import usePortfolio from "../../dashboard/hooks/usePortfolio";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 function StockDetail() {
   const { symbol } = useParams();
@@ -21,12 +25,15 @@ function StockDetail() {
   const { data: quoteResponse, isPending: isQuoteLoading } =
     useStockQuote(symbol);
 
+  const { data: portfolioResponse } = usePortfolio();
+  const holdings = portfolioResponse?.data?.holdings || [];
+  const currentHolding = holdings.find((h) => h.symbol.toUpperCase() === upperSymbol);
+
   const {
     data: chartResponse,
     isPending: isChartLoading,
     isError: isChartError,
   } = useStockChart(upperSymbol, interval, outputsize);
-  console.log("chart", chartResponse);
 
   const chartData = chartResponse?.data || {};
   const meta = chartData.meta || {};
@@ -39,18 +46,19 @@ function StockDetail() {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto">
       {/* Back button */}
-      <button
+      <Button
+        variant="ghost"
         onClick={() => navigate(-1)}
-        className="flex items-center gap-2 text-gray-500 hover:text-[#6425FE] transition-colors w-fit group cursor-pointer"
+        className="w-fit flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors group px-0 hover:bg-transparent"
       >
         <ArrowLeft
           size={18}
           className="group-hover:-translate-x-1 transition-transform"
         />
         <span className="text-sm font-medium">Back</span>
-      </button>
+      </Button>
 
       {/* Stock Header */}
       <StockHeader
@@ -58,10 +66,10 @@ function StockDetail() {
         meta={meta}
         quoteResponse={quoteResponse}
         isQuoteLoading={isQuoteLoading}
+        currentHolding={currentHolding}
       />
 
-      {/* Divider */}
-      <hr className="border-gray-100" />
+      <Separator />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 flex flex-col gap-6">
@@ -72,21 +80,23 @@ function StockDetail() {
           />
 
           {/* Chart */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-            {isChartError ? (
-              <div className="w-full h-80 flex items-center justify-center">
-                <span className="text-red-500 text-sm font-medium">
-                  Failed to load chart data. Please try again.
-                </span>
-              </div>
-            ) : (
-              <StockChart
-                values={values}
-                isLoading={isChartLoading}
-                isIntraday={activeLabel === "1D"}
-              />
-            )}
-          </div>
+          <Card>
+            <CardContent className="p-6">
+              {isChartError ? (
+                <div className="w-full h-80 flex items-center justify-center text-red-500">
+                  <span className="text-sm font-medium">
+                    Failed to load chart data. Please try again.
+                  </span>
+                </div>
+              ) : (
+                <StockChart
+                  values={values}
+                  isLoading={isChartLoading}
+                  isIntraday={activeLabel === "1D"}
+                />
+              )}
+            </CardContent>
+          </Card>
 
           {/* Stats */}
           <StockStats values={values} />

@@ -8,7 +8,7 @@ export default function Portfolio() {
 
   if (isPending) {
     return (
-      <div className="flex justify-center items-center h-full">
+      <div className="flex justify-center items-center h-full text-muted-foreground">
         Loading portfolio...
       </div>
     );
@@ -31,8 +31,8 @@ export default function Portfolio() {
   return (
     <div className="flex flex-col gap-8 w-full max-w-7xl mx-auto">
       <div>
-        <h1 className="text-2xl font-bold text-[#333333]">Portfolio</h1>
-        <p className="text-sm text-gray-400 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">Portfolio</h1>
+        <p className="text-sm text-muted-foreground mt-1">
           Detailed breakdown of your assets and history.
         </p>
       </div>

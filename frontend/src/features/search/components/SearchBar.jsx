@@ -4,6 +4,7 @@ import useStockSearch from "../hooks/useStockSearch";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchDropdown from "./SearchDropdown";
+import { Input } from "@/components/ui/input";
 
 function SearchBar() {
   const [query, setQuery] = useState("");
@@ -21,9 +22,9 @@ function SearchBar() {
 
   return (
     <div className="relative" ref={searchContainerRef}>
-      <div className="relative flex items-center group">
-        <Search className="absolute left-3.5 w-4 h-4 text-gray-400 group-focus-within:text-[#6425FE] transition-colors z-10 pointer-events-none" />
-        <input
+      <div className="relative flex items-center">
+        <Search className="absolute left-3 w-4 h-4 text-muted-foreground z-10 pointer-events-none" />
+        <Input
           type="text"
           placeholder="Search for stocks and more"
           value={query}
@@ -35,8 +36,11 @@ function SearchBar() {
           onFocus={() => {
             if (query.length >= 2) setIsOpen(true);
           }}
-          className="pl-10 pr-4 py-2 bg-[#F3F0FA] focus:bg-white focus:ring-1 focus:ring-[#6425FE] border border-transparent rounded-full text-sm w-[320px] outline-none transition-all placeholder:text-gray-400 text-gray-700 shadow-sm"
+          className="pl-9 pr-14 w-[320px] bg-muted border-transparent focus-visible:ring-1 focus-visible:ring-ring focus-visible:bg-background rounded-full transition-colors"
         />
+        <kbd className="pointer-events-none absolute right-3 hidden h-5 select-none items-center gap-1 rounded border bg-background px-1.5 font-mono text-[10px] font-medium text-muted-foreground sm:flex">
+          ⌘K
+        </kbd>
       </div>
 
       {isOpen && (

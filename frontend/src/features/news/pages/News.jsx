@@ -6,10 +6,10 @@ const News = () => {
   return (
     <div className="w-full h-full">
       <div className="mb-8 max-w-7xl">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl font-bold text-foreground mb-2">
           Market News & Insights
         </h1>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-muted-foreground">
           Stay updated with the latest trends across markets.
         </p>
       </div>

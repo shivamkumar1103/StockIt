@@ -1,4 +1,7 @@
-import { ArrowRight, TrendingDown, TrendingUp } from "lucide-react";
+import { ArrowRight, TrendingDown, TrendingUp, Wallet, PieChart, DollarSign, Activity } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 const BalanceCard = ({ walletBalance, currentValue, totalInvested, bestStock }) => {
   // Format numbers to USD currency
@@ -15,126 +18,106 @@ const BalanceCard = ({ walletBalance, currentValue, totalInvested, bestStock }) 
   const isPositive = percentChange >= 0;
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-6 flex flex-col gap-8 w-full shadow-sm">
-      {/* Top Half */}
-      <div className="flex flex-col md:flex-row gap-6 md:gap-12 justify-between">
-        {/* Balances & Invested */}
-        <div className="flex flex-col gap-4 flex-1">
-          {/* Wallet Balance Row */}
-          <div className="flex justify-between items-center bg-[#F8F9FA] p-4 rounded-xl border border-gray-100">
-            <p className="text-[#333333]/70 font-medium">Wallet Balance</p>
-            <div className="text-[#333333] font-bold text-xl">
-              {formatCurrency(walletBalance)}
-            </div>
-          </div>
+    <div className="flex flex-col gap-6 w-full">
+      {/* Top Row Stats */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {/* Wallet Balance */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Wallet Balance
+            </CardTitle>
+            <Wallet className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-foreground">{formatCurrency(walletBalance)}</div>
+          </CardContent>
+        </Card>
 
-          {/* Portfolio Value Row */}
-          <div>
-            <p className="text-[#333333]/60 text-sm font-medium mb-2 pl-2">
+        {/* Portfolio Value */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
               Portfolio Value
-            </p>
-            <div className="flex items-center gap-3">
-              <div className="bg-linear-to-r from-[#6425FE] to-[#804dfa] text-white font-bold text-2xl lg:text-3xl px-6 py-3 rounded-full shadow-md shadow-[#6425FE]/20">
-                {formatCurrency(currentValue)}
-              </div>
-              <div
-                className={`font-semibold px-3 py-1.5 rounded-full text-sm ${
-                  isPositive
-                    ? "bg-[#A6F7E2] text-teal-800"
-                    : "bg-red-100 text-red-800"
-                }`}
-              >
-                {isPositive ? "+" : ""}
-                {percentChange.toFixed(2)}%
-              </div>
+            </CardTitle>
+            <PieChart className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-foreground flex items-center justify-between">
+              {formatCurrency(currentValue)}
             </div>
-          </div>
-
-          {/* Invested Row */}
-          <div>
-            <p className="text-[#333333]/60 text-sm font-medium mb-2 pl-2">
-              Invested
+            <p className={`text-xs mt-1 font-medium ${isPositive ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"}`}>
+              {isPositive ? "+" : ""}{percentChange.toFixed(2)}%
             </p>
-            <div className="flex items-center gap-4">
-              <div className="bg-[#333333] text-white font-semibold text-xl px-5 py-2.5 rounded-full">
-                {formatCurrency(totalInvested)}
-              </div>
-              <button className="bg-[#F3F0FA] text-[#6425FE] p-3 rounded-full hover:bg-[#6425FE] hover:text-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#6425FE] focus:ring-offset-2">
-                <ArrowRight size={20} />
-              </button>
-            </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
-        {/* Top Stock */}
-        <div className="flex flex-col justify-between flex-1 relative border-l border-gray-100 pl-6 md:pl-12">
+        {/* Total Invested */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Total Invested
+            </CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent className="flex items-center justify-between">
+            <div className="text-2xl font-bold text-foreground">{formatCurrency(totalInvested)}</div>
+            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full">
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Top Performer */}
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base font-semibold flex items-center gap-2">
+            <Activity className="h-4 w-4 text-muted-foreground" />
+            Top Performer
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
           {bestStock ? (
-            <div>
-              <p className="text-[#333333]/60 text-sm font-medium mb-3">
-                Top Stock
-              </p>
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-3">
-                  <div
-                    className={`p-2 rounded-full ${
-                      bestStock.unrealizedPnL >= 0
-                        ? "bg-green-50 text-green-500"
-                        : "bg-red-50 text-red-500"
-                    }`}
-                  >
-                    {bestStock.unrealizedPnL >= 0 ? (
-                      <TrendingUp size={20} />
-                    ) : (
-                      <TrendingDown size={20} />
-                    )}
-                  </div>
-                  <div>
-                    <h4 className="text-[#333333] font-bold text-lg leading-tight uppercase">
-                      {bestStock.symbol}
-                    </h4>
-                    <span className="text-[#333333]/40 text-sm uppercase">
-                      {bestStock.symbol}
-                    </span>
-                  </div>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div className="flex items-center gap-4">
+                <div className={`p-3 rounded-full ${bestStock.unrealizedPnL >= 0 ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400" : "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400"}`}>
+                  {bestStock.unrealizedPnL >= 0 ? (
+                    <TrendingUp className="h-6 w-6" />
+                  ) : (
+                    <TrendingDown className="h-6 w-6" />
+                  )}
                 </div>
-                <div
-                  className={`font-semibold px-3 py-1 rounded-lg text-sm ${
-                    bestStock.unrealizedPnL >= 0
-                      ? "text-green-600 bg-green-50"
-                      : "text-red-500 bg-red-50"
-                  }`}
-                >
-                  {bestStock.unrealizedPnL >= 0 ? "+" : ""}
-                  {formatCurrency(bestStock.unrealizedPnL)}
+                <div>
+                  <h4 className="font-bold text-xl uppercase text-foreground">{bestStock.symbol}</h4>
+                  <span className="text-xs text-muted-foreground uppercase">Asset</span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-6 text-sm">
-                <div>
-                  <span className="text-[#333333]/40 block text-xs mb-0.5">
-                    Invested Value
-                  </span>
-                  <span className="text-[#333333] font-semibold">
-                    {formatCurrency(bestStock.investmentValue)}
-                  </span>
+              <div className="flex gap-6 items-center">
+                <div className="flex flex-col">
+                  <span className="text-xs text-muted-foreground uppercase mb-1">Invested</span>
+                  <span className="font-medium text-foreground">{formatCurrency(bestStock.investmentValue)}</span>
                 </div>
-                <div>
-                  <span className="text-[#333333]/40 block text-xs mb-0.5">
-                    Current Value
-                  </span>
-                  <span className="text-[#333333] font-semibold">
-                    {formatCurrency(bestStock.currentValue)}
-                  </span>
+                <div className="flex flex-col">
+                  <span className="text-xs text-muted-foreground uppercase mb-1">Current</span>
+                  <span className="font-medium text-foreground">{formatCurrency(bestStock.currentValue)}</span>
+                </div>
+                <div className="flex flex-col items-end">
+                  <span className="text-xs text-muted-foreground uppercase mb-1">P/L</span>
+                  <Badge variant={bestStock.unrealizedPnL >= 0 ? "default" : "destructive"} className={bestStock.unrealizedPnL >= 0 ? "bg-emerald-500 hover:bg-emerald-600" : ""}>
+                    {bestStock.unrealizedPnL >= 0 ? "+" : ""}{formatCurrency(bestStock.unrealizedPnL)}
+                  </Badge>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center h-full text-[#333333]/40">
-              <p>No stocks in portfolio</p>
+            <div className="flex items-center justify-center py-6 text-sm text-muted-foreground border-2 border-dashed border-border rounded-lg">
+              No holdings
             </div>
           )}
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

@@ -10,15 +10,15 @@ const MyStocks = ({ stocks }) => {
   const [isDragging, setIsDragging] = useState(false);
 
   if (!stocks || stocks.length === 0) {
-    return <div>No stocks available.</div>;
+    return <div className="text-muted-foreground text-sm">No stocks available.</div>;
   }
   return (
     <div className="w-full select-none">
-      <h2 className="font-semibold text-lg text-[#333333] mb-4">My Stocks</h2>
+      <h2 className="font-semibold text-lg text-foreground mb-4">My Stocks</h2>
       <div className="relative group">
         <div
           ref={scrollRef}
-          className="overflow-hidden w-full cursor-grab active:cursor-grabbing"
+          className="overflow-hidden w-full cursor-grab active:cursor-grabbing pb-2"
         >
           <motion.div
             drag="x"

@@ -1,5 +1,6 @@
 import SearchItem from "./SearchItem";
 import SearchLoader from "./SearchLoader";
+import { Card } from "@/components/ui/card";
 
 const SearchDropdown = ({ results, loading, error, onSelect }) => {
   const renderContent = () => {
@@ -9,7 +10,7 @@ const SearchDropdown = ({ results, loading, error, onSelect }) => {
 
     if (error) {
       return (
-        <div className="px-4 py-6 text-center text-sm text-red-500 font-medium">
+        <div className="px-4 py-6 text-center text-sm text-destructive font-medium">
           Failed to fetch results. Please try again.
         </div>
       );
@@ -17,14 +18,14 @@ const SearchDropdown = ({ results, loading, error, onSelect }) => {
 
     if (!results?.result || results.result.length === 0) {
       return (
-        <div className="px-4 py-6 text-center text-sm text-gray-500">
+        <div className="px-4 py-6 text-center text-sm text-muted-foreground">
           No results found for your query.
         </div>
       );
     }
 
     return (
-      <ul className="max-h-100 overflow-y-auto">
+      <ul className="max-h-96 overflow-y-auto py-1">
         {results.result.map((stock) => (
           <SearchItem
             key={stock.symbol}
@@ -39,9 +40,9 @@ const SearchDropdown = ({ results, loading, error, onSelect }) => {
   };
 
   return (
-    <div className="absolute top-full left-0 mt-2 w-95 bg-white rounded-xl shadow-xl border border-gray-200/60 overflow-hidden z-50">
+    <Card className="absolute top-full left-0 mt-2 w-full min-w-[320px] shadow-md border-border overflow-hidden z-50">
       {renderContent()}
-    </div>
+    </Card>
   );
 };
 

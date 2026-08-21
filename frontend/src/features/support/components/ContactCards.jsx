@@ -2,6 +2,8 @@ import { useState } from "react";
 import { MapPin, Phone, Mail, Clock, Copy, Check } from "lucide-react";
 import toast from "react-hot-toast";
 import { CONTACT_DETAILS } from "../data/contactData";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 export default function ContactCards() {
   const [copiedItem, setCopiedItem] = useState(null);
@@ -15,212 +17,208 @@ export default function ContactCards() {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Office Address Card */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 flex flex-col justify-between gap-4 shadow-sm hover:border-gray-200 transition-all">
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <div className="p-2.5 rounded-xl bg-[#F3F0FA] text-[#6425FE] w-fit">
+        <Card className="flex flex-col justify-between hover:border-primary/50 transition-colors">
+          <CardHeader className="pb-4">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-2.5 rounded-xl bg-muted text-primary">
                 <MapPin size={22} />
               </div>
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-emerald-600 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
                 Gurugram Office
               </span>
             </div>
-            <div>
-              <h4 className="text-base font-bold text-[#333333]">
-                {CONTACT_DETAILS.address.title}
-              </h4>
-              <p className="text-xs text-gray-500 mt-1 font-medium leading-relaxed">
-                <strong className="text-gray-700 block">
-                  {CONTACT_DETAILS.address.line1}
-                </strong>
-                {CONTACT_DETAILS.address.line2}
-                <br />
-                {CONTACT_DETAILS.address.line3}
-                <br />
-                {CONTACT_DETAILS.address.country}
-              </p>
-            </div>
-          </div>
-
-          <div className="pt-3 border-t border-gray-100 flex items-center justify-between text-xs">
-            <span className="text-gray-400 font-medium">Cyber City Hub</span>
-            <button
-              type="button"
+            <h4 className="text-base font-bold text-foreground">
+              {CONTACT_DETAILS.address.title}
+            </h4>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground font-medium leading-relaxed">
+              <strong className="text-foreground block mb-1">
+                {CONTACT_DETAILS.address.line1}
+              </strong>
+              {CONTACT_DETAILS.address.line2}
+              <br />
+              {CONTACT_DETAILS.address.line3}
+              <br />
+              {CONTACT_DETAILS.address.country}
+            </p>
+          </CardContent>
+          <CardFooter className="pt-4 border-t border-border flex items-center justify-between text-sm">
+            <span className="text-muted-foreground font-medium">Cyber City Hub</span>
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() =>
                 copyToClipboard(
                   `${CONTACT_DETAILS.address.line1}, ${CONTACT_DETAILS.address.line2}, ${CONTACT_DETAILS.address.line3}`,
                   "Address",
                 )
               }
-              className="inline-flex items-center gap-1 text-[#6425FE] hover:text-[#6425FE]/80 font-semibold cursor-pointer"
+              className="text-primary hover:text-primary/80 gap-1.5 h-8 px-2"
             >
               {copiedItem === "Address" ? (
                 <>
-                  <Check size={13} className="text-emerald-600" />
+                  <Check size={14} className="text-emerald-600" />
                   <span className="text-emerald-600">Copied</span>
                 </>
               ) : (
                 <>
-                  <Copy size={13} />
+                  <Copy size={14} />
                   <span>Copy Address</span>
                 </>
               )}
-            </button>
-          </div>
-        </div>
+            </Button>
+          </CardFooter>
+        </Card>
 
         {/* Email Support Card */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 flex flex-col justify-between gap-4 shadow-sm hover:border-gray-200 transition-all">
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <div className="p-2.5 rounded-xl bg-[#F3F0FA] text-[#6425FE] w-fit">
+        <Card className="flex flex-col justify-between hover:border-primary/50 transition-colors">
+          <CardHeader className="pb-4">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-2.5 rounded-xl bg-muted text-primary">
                 <Mail size={22} />
               </div>
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6425FE] bg-[#F3F0FA] px-2.5 py-0.5 rounded-full border border-[#6425FE]/20">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-primary bg-primary/10 px-2.5 py-0.5 rounded-full border border-primary/20">
                 Email Support
               </span>
             </div>
-            <div>
-              <h4 className="text-base font-bold text-[#333333]">
-                Write to Us
-              </h4>
-              <div className="flex flex-col gap-2 mt-2">
-                {CONTACT_DETAILS.emails.map((item) => (
-                  <div
-                    key={item.email}
-                    className="bg-[#F8F9FA] p-2.5 rounded-xl border border-gray-100 flex items-center justify-between"
-                  >
-                    <div>
-                      <span className="text-[11px] text-gray-400 font-medium block">
-                        {item.label}
-                      </span>
-                      <a
-                        href={`mailto:${item.email}`}
-                        className="text-xs font-bold text-[#6425FE] hover:underline"
-                      >
-                        {item.email}
-                      </a>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => copyToClipboard(item.email, item.email)}
-                      className="p-1.5 rounded-lg text-gray-400 hover:text-[#6425FE] hover:bg-white transition-colors cursor-pointer"
-                      title="Copy email"
+            <h4 className="text-base font-bold text-foreground">
+              Write to Us
+            </h4>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col gap-2">
+              {CONTACT_DETAILS.emails.map((item) => (
+                <div
+                  key={item.email}
+                  className="bg-muted/50 p-3 rounded-xl border border-border flex items-center justify-between"
+                >
+                  <div>
+                    <span className="text-xs text-muted-foreground font-medium block mb-0.5">
+                      {item.label}
+                    </span>
+                    <a
+                      href={`mailto:${item.email}`}
+                      className="text-sm font-semibold text-primary hover:underline"
                     >
-                      {copiedItem === item.email ? (
-                        <Check size={14} className="text-emerald-600" />
-                      ) : (
-                        <Copy size={14} />
-                      )}
-                    </button>
+                      {item.email}
+                    </a>
                   </div>
-                ))}
-              </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => copyToClipboard(item.email, item.email)}
+                    className="h-8 w-8 text-muted-foreground hover:text-primary"
+                    title="Copy email"
+                  >
+                    {copiedItem === item.email ? (
+                      <Check size={16} className="text-emerald-600" />
+                    ) : (
+                      <Copy size={16} />
+                    )}
+                  </Button>
+                </div>
+              ))}
             </div>
-          </div>
-
-          <div className="pt-2 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
+          </CardContent>
+          <CardFooter className="pt-4 border-t border-border flex items-center justify-between text-sm text-muted-foreground">
             <span>Average response: within 2 hours</span>
-          </div>
-        </div>
+          </CardFooter>
+        </Card>
 
         {/* Phone Helplines Card */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 flex flex-col justify-between gap-4 shadow-sm hover:border-gray-200 transition-all">
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <div className="p-2.5 rounded-xl bg-[#F3F0FA] text-[#6425FE] w-fit">
+        <Card className="flex flex-col justify-between hover:border-primary/50 transition-colors">
+          <CardHeader className="pb-4">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-2.5 rounded-xl bg-muted text-primary">
                 <Phone size={22} />
               </div>
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-blue-600 bg-blue-50 dark:bg-blue-950/50 px-2.5 py-0.5 rounded-full border border-blue-200 dark:border-blue-800">
                 Call Helpline
               </span>
             </div>
-            <div>
-              <h4 className="text-base font-bold text-[#333333]">
-                Phone Support
-              </h4>
-              <div className="flex flex-col gap-2 mt-2">
-                {CONTACT_DETAILS.phones.map((phone) => (
-                  <div
-                    key={phone.number}
-                    className="bg-[#F8F9FA] p-2.5 rounded-xl border border-gray-100 flex items-center justify-between"
-                  >
-                    <div>
-                      <span className="text-[11px] text-gray-400 font-medium block">
-                        {phone.label} ({phone.type})
-                      </span>
-                      <a
-                        href={`tel:${phone.value}`}
-                        className="text-xs font-bold text-[#333333] hover:text-[#6425FE]"
-                      >
-                        {phone.number}
-                      </a>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        copyToClipboard(phone.number, phone.number)
-                      }
-                      className="p-1.5 rounded-lg text-gray-400 hover:text-[#6425FE] hover:bg-white transition-colors cursor-pointer"
-                      title="Copy phone number"
+            <h4 className="text-base font-bold text-foreground">
+              Phone Support
+            </h4>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col gap-2">
+              {CONTACT_DETAILS.phones.map((phone) => (
+                <div
+                  key={phone.number}
+                  className="bg-muted/50 p-3 rounded-xl border border-border flex items-center justify-between"
+                >
+                  <div>
+                    <span className="text-xs text-muted-foreground font-medium block mb-0.5">
+                      {phone.label} ({phone.type})
+                    </span>
+                    <a
+                      href={`tel:${phone.value}`}
+                      className="text-sm font-semibold text-foreground hover:text-primary"
                     >
-                      {copiedItem === phone.number ? (
-                        <Check size={14} className="text-emerald-600" />
-                      ) : (
-                        <Copy size={14} />
-                      )}
-                    </button>
+                      {phone.number}
+                    </a>
                   </div>
-                ))}
-              </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => copyToClipboard(phone.number, phone.number)}
+                    className="h-8 w-8 text-muted-foreground hover:text-primary"
+                    title="Copy phone number"
+                  >
+                    {copiedItem === phone.number ? (
+                      <Check size={16} className="text-emerald-600" />
+                    ) : (
+                      <Copy size={16} />
+                    )}
+                  </Button>
+                </div>
+              ))}
             </div>
-          </div>
-
-          <div className="pt-2 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
+          </CardContent>
+          <CardFooter className="pt-4 border-t border-border flex items-center justify-between text-sm text-muted-foreground">
             <span>Direct Indian Helpline</span>
-          </div>
-        </div>
+          </CardFooter>
+        </Card>
 
         {/* Operating Hours Card */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 flex flex-col justify-between gap-4 shadow-sm hover:border-gray-200 transition-all">
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <div className="p-2.5 rounded-xl bg-[#F3F0FA] text-[#6425FE] w-fit">
+        <Card className="flex flex-col justify-between hover:border-primary/50 transition-colors">
+          <CardHeader className="pb-4">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-2.5 rounded-xl bg-muted text-primary">
                 <Clock size={22} />
               </div>
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-amber-700 bg-amber-50 dark:bg-amber-950/50 px-2.5 py-0.5 rounded-full border border-amber-200 dark:border-amber-800">
                 IST Timezone
               </span>
             </div>
-            <div>
-              <h4 className="text-base font-bold text-[#333333]">
-                Support Hours
-              </h4>
-              <div className="flex flex-col gap-2 mt-2">
-                {CONTACT_DETAILS.hours.map((h, i) => (
-                  <div
-                    key={i}
-                    className="bg-[#F8F9FA] p-2.5 rounded-xl border border-gray-100"
-                  >
-                    <span className="text-[11px] font-semibold text-[#333333] block">
-                      {h.days}
-                    </span>
-                    <span className="text-xs text-gray-500 font-medium">
-                      {h.time}
-                    </span>
-                  </div>
-                ))}
-              </div>
+            <h4 className="text-base font-bold text-foreground">
+              Support Hours
+            </h4>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col gap-2">
+              {CONTACT_DETAILS.hours.map((h, i) => (
+                <div
+                  key={i}
+                  className="bg-muted/50 p-3 rounded-xl border border-border flex flex-col gap-1"
+                >
+                  <span className="text-sm font-semibold text-foreground">
+                    {h.days}
+                  </span>
+                  <span className="text-sm text-muted-foreground font-medium">
+                    {h.time}
+                  </span>
+                </div>
+              ))}
             </div>
-          </div>
-
-          <div className="pt-2 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
+          </CardContent>
+          <CardFooter className="pt-4 border-t border-border flex items-center justify-between text-sm text-muted-foreground">
             <span>Closed on National & Exchange Holidays</span>
-          </div>
-        </div>
+          </CardFooter>
+        </Card>
       </div>
     </div>
   );

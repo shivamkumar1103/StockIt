@@ -1,4 +1,6 @@
 import { ArrowUp, ArrowDown } from "lucide-react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 const StockCard = ({ name, ticker, value, averagePrice, quantity }) => {
   const current = value || 0;
@@ -12,80 +14,81 @@ const StockCard = ({ name, ticker, value, averagePrice, quantity }) => {
   const totalReturn = quantity ? (current - averagePrice) * quantity : 0;
 
   const bgColors = [
-    "bg-[#6425FE]",
-    "bg-[#10B981]",
-    "bg-[#F59E0B]",
-    "bg-[#3B82F6]",
-    "bg-[#EC4899]",
+    "bg-indigo-600",
+    "bg-emerald-500",
+    "bg-amber-500",
+    "bg-blue-500",
+    "bg-pink-500",
   ];
   const logoBg = bgColors[(ticker?.charCodeAt(0) || 0) % bgColors.length];
 
   return (
-    <div className="min-w-64 bg-[#1E1E1E] rounded-xl p-5 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border border-gray-800">
-      <div className="flex justify-between items-start mb-6">
+    <Card className="min-w-72 cursor-pointer transition-colors hover:bg-accent/50 border-border bg-card">
+      <CardHeader className="flex flex-row justify-between items-start pb-4">
         <div className="flex items-center gap-3">
           <div
-            className={`w-12 h-12 rounded-full ${logoBg} flex items-center justify-center text-white shadow-sm font-bold text-xl`}
+            className={`w-10 h-10 rounded-lg ${logoBg} flex items-center justify-center text-white font-bold text-lg`}
           >
             {ticker?.charAt(0).toUpperCase()}
           </div>
           <div className="flex flex-col">
-            <span className="text-gray-400 font-medium text-sm leading-tight uppercase">
+            <span className="text-muted-foreground text-xs uppercase mb-0.5">
               {name || ticker}
             </span>
-            <span className="font-bold text-white tracking-wide mt-0.5">
+            <span className="font-bold text-foreground text-base">
               {ticker}
             </span>
           </div>
         </div>
-        <div
-          className={`flex items-center px-2 py-1 rounded text-sm font-medium ${
+        <Badge
+          variant={isPositive ? "outline" : "destructive"}
+          className={`flex items-center px-2 py-1 text-xs font-semibold ${
             isPositive
-              ? "bg-[#137333]/20 text-[#4ADE80]"
-              : "bg-[#A50E0E]/20 text-[#F87171]"
+              ? "text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-900/20"
+              : "text-red-600 dark:text-red-400 border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20"
           }`}
         >
           {isPositive ? (
-            <ArrowUp size={14} strokeWidth={2.5} className="mr-1" />
+            <ArrowUp size={12} className="mr-1" />
           ) : (
-            <ArrowDown size={14} strokeWidth={2.5} className="mr-1" />
+            <ArrowDown size={12} className="mr-1" />
           )}
           {Math.abs(displayChange).toFixed(1)}%
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-1 mb-4">
-        <span className="text-gray-400 text-sm">Current Price</span>
-        <span className="text-3xl font-bold text-white tracking-tight">
-          ${current.toFixed(2)}
-        </span>
-      </div>
-
-      <hr className="border-gray-800 my-4" />
-
-      <div className="flex justify-between items-end">
-        <div className="flex flex-col gap-1">
-          <span className="text-gray-400 text-sm">Avg Buy Price</span>
-          <span className="text-lg font-medium text-white">
-            ${averagePrice?.toFixed(2) || "0.00"}
+        </Badge>
+      </CardHeader>
+      
+      <CardContent>
+        <div className="flex flex-col gap-1 mb-6">
+          <span className="text-muted-foreground text-xs uppercase">Current Price</span>
+          <span className="text-2xl font-bold text-foreground">
+            ${current.toFixed(2)}
           </span>
         </div>
-        <div className="flex flex-col gap-1 items-end">
-          <span className="text-gray-400 text-sm">Total Return</span>
-          <span
-            className={`text-lg font-medium ${
-              isPositive ? "text-[#4ADE80]" : "text-[#F87171]"
-            }`}
-          >
-            {isPositive ? "+" : "-"}$
-            {Math.abs(totalReturn).toLocaleString("en-US", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-          </span>
+
+        <div className="flex justify-between items-end">
+          <div className="flex flex-col gap-1">
+            <span className="text-muted-foreground text-[10px] uppercase">Avg Buy Price</span>
+            <span className="text-sm font-semibold text-foreground">
+              ${averagePrice?.toFixed(2) || "0.00"} <span className="text-muted-foreground font-normal">({quantity || 0})</span>
+            </span>
+          </div>
+          <div className="flex flex-col gap-1 items-end">
+            <span className="text-muted-foreground text-[10px] uppercase">Total Return</span>
+            <span
+              className={`text-sm font-semibold ${
+                isPositive ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"
+              }`}
+            >
+              {isPositive ? "+" : "-"}$
+              {Math.abs(totalReturn).toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </span>
+          </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
