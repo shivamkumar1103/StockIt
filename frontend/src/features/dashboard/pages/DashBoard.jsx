@@ -7,6 +7,7 @@ import { useHomeData } from "../hooks/useHomeData";
 import usePortfolio from "../hooks/usePortfolio";
 import useUser from "../../../hooks/useAuth";
 import { Separator } from "@/components/ui/separator";
+import { Spinner } from "@/components/ui/spinner";
 
 function DashBoard() {
   const {
@@ -24,8 +25,8 @@ function DashBoard() {
 
   if (isHomePending || isPortfolioPending) {
     return (
-      <div className="flex justify-center items-center h-full text-muted-foreground">
-        Loading dashboard...
+      <div className="flex justify-center items-center h-[50vh]">
+        <Spinner size="lg" />
       </div>
     );
   }

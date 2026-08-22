@@ -2,14 +2,15 @@ import usePortfolio from "../../dashboard/hooks/usePortfolio";
 import PortfolioBalance from "../components/PortfolioBalance";
 import PortfolioAssets from "../components/PortfolioAssets";
 import PortfolioHistory from "../components/PortfolioHistory";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function Portfolio() {
   const { data: portfolioData, isPending, isError } = usePortfolio();
 
   if (isPending) {
     return (
-      <div className="flex justify-center items-center h-full text-muted-foreground">
-        Loading portfolio...
+      <div className="flex justify-center items-center h-[50vh]">
+        <Spinner size="lg" />
       </div>
     );
   }

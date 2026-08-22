@@ -56,10 +56,12 @@ const StockCard = ({ name, ticker, value, averagePrice, quantity }) => {
           {Math.abs(displayChange).toFixed(1)}%
         </Badge>
       </CardHeader>
-      
+
       <CardContent>
         <div className="flex flex-col gap-1 mb-6">
-          <span className="text-muted-foreground text-xs uppercase">Current Price</span>
+          <span className="text-muted-foreground text-xs uppercase">
+            Current Price
+          </span>
           <span className="text-2xl font-bold text-foreground">
             ${current.toFixed(2)}
           </span>
@@ -67,16 +69,25 @@ const StockCard = ({ name, ticker, value, averagePrice, quantity }) => {
 
         <div className="flex justify-between items-end">
           <div className="flex flex-col gap-1">
-            <span className="text-muted-foreground text-[10px] uppercase">Avg Buy Price</span>
+            <span className="text-muted-foreground text-[10px] uppercase">
+              Avg Buy Price
+            </span>
             <span className="text-sm font-semibold text-foreground">
-              ${averagePrice?.toFixed(2) || "0.00"} <span className="text-muted-foreground font-normal">({quantity || 0})</span>
+              ${averagePrice?.toFixed(2) || "0.00"}{" "}
+              <span className="text-muted-foreground font-normal">
+                ({quantity || 0})
+              </span>
             </span>
           </div>
           <div className="flex flex-col gap-1 items-end">
-            <span className="text-muted-foreground text-[10px] uppercase">Total Return</span>
+            <span className="text-muted-foreground text-[10px] uppercase">
+              Total Return
+            </span>
             <span
               className={`text-sm font-semibold ${
-                isPositive ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"
+                isPositive
+                  ? "text-emerald-600 dark:text-emerald-400"
+                  : "text-red-600 dark:text-red-400"
               }`}
             >
               {isPositive ? "+" : "-"}$

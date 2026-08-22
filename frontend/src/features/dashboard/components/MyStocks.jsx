@@ -10,7 +10,9 @@ const MyStocks = ({ stocks }) => {
   const [isDragging, setIsDragging] = useState(false);
 
   if (!stocks || stocks.length === 0) {
-    return <div className="text-muted-foreground text-sm">No stocks available.</div>;
+    return (
+      <div className="text-muted-foreground text-sm">No stocks available.</div>
+    );
   }
   return (
     <div className="w-full select-none">

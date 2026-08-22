@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import NewsCard from "@/components/NewsCard";
 import { useNewsData } from "../hooks/useNewsData";
+import { Spinner } from "@/components/ui/spinner";
 
 const gradients = [
   "from-emerald-500 to-emerald-700",
@@ -19,7 +20,9 @@ const NewsSection = ({ category }) => {
 
   if (isPending) {
     return (
-      <div className="mb-10 text-muted-foreground">Loading {category} news...</div>
+      <div className="flex justify-center mb-10 py-10">
+        <Spinner />
+      </div>
     );
   }
 

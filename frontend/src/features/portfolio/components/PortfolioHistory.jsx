@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
 import { useOrders } from "../hooks/useOrders";
 import { useTrades } from "../hooks/useTrades";
 import { useTransactions } from "../hooks/useTransactions";
@@ -8,6 +7,7 @@ import { TradeRow } from "./TradeRow";
 import { TransactionRow } from "./TransactionRow";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Table,
   TableBody,
@@ -62,9 +62,8 @@ export default function PortfolioHistory() {
                 {isPending ? (
                   <TableRow>
                     <TableCell colSpan={5} className="h-24 text-center">
-                      <div className="flex items-center justify-center gap-2 text-muted-foreground">
-                        <Loader2 size={16} className="animate-spin" />
-                        <span>Loading {activeTab.toLowerCase()}...</span>
+                      <div className="flex items-center justify-center py-4">
+                        <Spinner />
                       </div>
                     </TableCell>
                   </TableRow>

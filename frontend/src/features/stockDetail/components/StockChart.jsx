@@ -14,6 +14,7 @@ import {
   calculateChartDomain,
   getChartTrend,
 } from "../utils/formatters";
+import { Spinner } from "@/components/ui/spinner";
 
 const CustomTooltip = ({ active, payload, isIntraday }) => {
   if (!active || !payload?.length) return null;
@@ -54,10 +55,8 @@ const CustomTooltip = ({ active, payload, isIntraday }) => {
 const StockChart = ({ values = [], isLoading, isIntraday = false }) => {
   if (isLoading) {
     return (
-      <div className="w-full h-80 bg-muted/50 rounded-xl animate-pulse flex items-center justify-center">
-        <span className="text-muted-foreground text-sm font-medium">
-          Loading chart...
-        </span>
+      <div className="w-full h-80 bg-muted/50 rounded-xl flex items-center justify-center">
+        <Spinner />
       </div>
     );
   }
