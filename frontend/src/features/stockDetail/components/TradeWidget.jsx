@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
-const TradeWidget = ({ symbol, quoteResponse, isQuoteLoading }) => {
+const TradeWidget = ({ symbol, companyName, quoteResponse, isQuoteLoading }) => {
   const currentPrice = quoteResponse?.data?.currentPrice || 0;
 
   const [tradeType, setTradeType] = useState("buy"); // 'buy' or 'sell'
@@ -33,6 +33,7 @@ const TradeWidget = ({ symbol, quoteResponse, isQuoteLoading }) => {
 
     const tradeData = {
       symbol,
+      companyName,
       quantity: parseInt(quantity),
       price: currentPrice,
     };

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import useStockChart from "../hooks/useStockChart";
 import StockHeader from "../components/StockHeader";
@@ -15,8 +15,10 @@ import { Separator } from "@/components/ui/separator";
 
 function StockDetail() {
   const { symbol } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
   const upperSymbol = symbol?.toUpperCase();
+  const companyName = location.state?.companyName;
 
   const [interval, setInterval] = useState("30min");
   const [outputsize, setOutputsize] = useState(65); // Default to 5D
@@ -63,6 +65,7 @@ function StockDetail() {
       {/* Stock Header */}
       <StockHeader
         symbol={upperSymbol}
+        companyName={companyName}
         meta={meta}
         quoteResponse={quoteResponse}
         isQuoteLoading={isQuoteLoading}
@@ -106,6 +109,7 @@ function StockDetail() {
         <div className="lg:col-span-1">
           <TradeWidget
             symbol={upperSymbol}
+            companyName={companyName}
             quoteResponse={quoteResponse}
             isQuoteLoading={isQuoteLoading}
           />

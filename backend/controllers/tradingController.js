@@ -1,7 +1,7 @@
 import * as tradingService from "../services/tradingService.js";
 
 export const buyOrder = async (req, res) => {
-  const { symbol, quantity } = req.body;
+  const { symbol, quantity, companyName } = req.body;
   const userId = req.user.id;
   if (!symbol || !quantity) {
     return res
@@ -9,7 +9,7 @@ export const buyOrder = async (req, res) => {
       .json({ message: "Symbol and quantity are required" });
   }
 
-  const result = await tradingService.placeBuyOrder(userId, symbol, quantity);
+  const result = await tradingService.placeBuyOrder(userId, symbol, quantity, companyName);
   res
     .status(201)
     .json({

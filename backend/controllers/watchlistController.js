@@ -14,7 +14,7 @@ export const getWatchlist = async (req, res) => {
 
 export const addToWatchlist = async (req, res) => {
   const userId = req.user.id;
-  const { symbol, exchange } = req.body;
+  const { symbol, exchange, companyName } = req.body;
   if (!symbol) {
     throw new AppError("Symbol is required!", 400);
   }
@@ -23,6 +23,7 @@ export const addToWatchlist = async (req, res) => {
     userId,
     symbol,
     exchange,
+    companyName
   );
 
   res.status(201).json({

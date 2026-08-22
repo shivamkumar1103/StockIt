@@ -20,11 +20,13 @@ export const createOrder = async (
   quantity,
   totalCost,
   side,
+  companyName,
   session,
 ) => {
   const order = new Order({
     user: userId,
     symbol,
+    companyName,
     side,
     quantity,
     type: "market",
@@ -76,6 +78,7 @@ export const updatePortfolioOnBuy = async (
   symbol,
   quantity,
   price,
+  companyName,
   session,
 ) => {
   let portfolio = await Portfolio.findOne({ user: userId }).session(session);
@@ -92,8 +95,11 @@ export const updatePortfolioOnBuy = async (
       holding.quantity * holding.averagePrice + quantity * price;
     holding.quantity += quantity;
     holding.averagePrice = totalValue / holding.quantity;
+    if (companyName && !holding.companyName) {
+      holding.companyName = companyName;
+    }
   } else {
-    portfolio.holdings.push({ symbol, quantity, averagePrice: price });
+    portfolio.holdings.push({ symbol, companyName, quantity, averagePrice: price });
   }
 
   await portfolio.save({ session });

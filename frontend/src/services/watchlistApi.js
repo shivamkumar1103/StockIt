@@ -5,9 +5,10 @@ export const getWatchlist = async () => {
   return response.data;
 };
 
-export const addToWatchlist = async ({ symbol, exchange }) => {
+export const addToWatchlist = async ({ symbol, companyName, exchange }) => {
   const response = await api.post("/watchlist", {
     symbol,
+    companyName,
     exchange,
   });
   return response.data;

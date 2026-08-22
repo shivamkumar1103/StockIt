@@ -14,6 +14,10 @@ const OrderSchema = new mongoose.Schema(
       uppercase: true,
       trim: true,
     },
+    companyName: {
+      type: String,
+      trim: true,
+    },
 
     side: {
       type: String,

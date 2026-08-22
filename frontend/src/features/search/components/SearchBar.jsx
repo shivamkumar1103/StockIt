@@ -15,7 +15,7 @@ function SearchBar() {
     useStockSearch(debouncedQuery);
 
   const handleSelect = (stock) => {
-    navigate(`/stocks/${stock.symbol}`);
+    navigate(`/stocks/${stock.symbol}`, { state: { companyName: stock.description } });
     setQuery("");
     setIsOpen(false);
   };

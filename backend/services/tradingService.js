@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import * as stockService from "./stockService.js";
 import * as tradingRepository from "../repository/tradingRepository.js";
 
-export const placeBuyOrder = async (userId, symbol, quantity) => {
+export const placeBuyOrder = async (userId, symbol, quantity, companyName) => {
   if (!quantity || quantity <= 0) {
     throw new Error("Invalid quantity");
   }
@@ -31,6 +31,7 @@ export const placeBuyOrder = async (userId, symbol, quantity) => {
       quantity,
       totalCost,
       "buy",
+      companyName,
       session,
     );
 
@@ -55,6 +56,7 @@ export const placeBuyOrder = async (userId, symbol, quantity) => {
       symbol,
       quantity,
       currentPrice,
+      companyName,
       session,
     );
 
@@ -104,6 +106,7 @@ export const placeSellOrder = async (userId, symbol, quantity) => {
       quantity,
       totalRevenue,
       "sell",
+      holding.companyName,
       session,
     );
 

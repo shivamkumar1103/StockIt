@@ -32,6 +32,7 @@ const MyStocks = ({ stocks }) => {
               <Link
                 key={stock.symbol}
                 to={`/stocks/${stock.symbol}`}
+                state={{ companyName: stock.companyName }}
                 className="snap-start shrink-0 no-underline"
                 draggable={false}
                 onClick={(e) => {
@@ -42,7 +43,7 @@ const MyStocks = ({ stocks }) => {
               >
                 <StockCard
                   key={stock.symbol}
-                  name={stock.symbol}
+                  name={stock.companyName || stock.symbol}
                   ticker={stock.symbol}
                   value={stock.currentPrice}
                   quantity={stock.quantity}

@@ -12,7 +12,7 @@ export const getWatchlist = async (userId) => {
   return watchlist;
 };
 
-export const addToWatchlist = async (userId, symbol, exchange) => {
+export const addToWatchlist = async (userId, symbol, exchange, companyName) => {
   const watchlist = await watchlistRepository.getWatchlist(userId);
   const formattedSymbol = symbol.toUpperCase();
 
@@ -42,6 +42,7 @@ export const addToWatchlist = async (userId, symbol, exchange) => {
     userId,
     formattedSymbol,
     exchange,
+    companyName
   );
   return updatedWatchlist;
 };

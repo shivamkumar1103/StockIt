@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const StockHeader = ({
   symbol,
+  companyName,
   meta,
   quoteResponse,
   isQuoteLoading,
@@ -38,7 +39,7 @@ const StockHeader = ({
     if (isInWatchlist) {
       removeFromWatchlist(symbol);
     } else {
-      addToWatchlist({ symbol: symbol, exchange: exchange });
+      addToWatchlist({ symbol: symbol, companyName: companyName, exchange: exchange });
     }
   };
 
@@ -79,6 +80,11 @@ const StockHeader = ({
               )}
             </Button>
           </div>
+          {companyName && (
+            <span className="text-foreground text-lg mt-1 font-medium truncate max-w-md">
+              {companyName}
+            </span>
+          )}
           <span className="text-muted-foreground text-sm uppercase mt-1 block font-medium">
             {type} <span className="mx-2 text-border">•</span> {exchange}
           </span>

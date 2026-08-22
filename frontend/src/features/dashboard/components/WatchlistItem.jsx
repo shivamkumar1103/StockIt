@@ -2,11 +2,13 @@ import { Link } from "react-router-dom";
 import { Trash2 } from "lucide-react";
 
 const WatchlistItem = ({ stock, onDeleteClick }) => {
+  console.log("Rendering WatchlistItem for stock:", stock);
   return (
     <div className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-accent transition-colors group cursor-pointer">
       {/* Clickable area — navigates to stock detail */}
       <Link
         to={`/stocks/${stock.symbol}`}
+        state={{ companyName: stock.companyName }}
         className="flex items-center gap-3 flex-1 min-w-0 no-underline"
         draggable={false}
       >
@@ -22,8 +24,8 @@ const WatchlistItem = ({ stock, onDeleteClick }) => {
           <span className="font-semibold text-foreground transition-colors truncate max-w-40 text-sm">
             {stock.symbol}
           </span>
-          <span className="text-[11px] text-muted-foreground font-medium mt-0.5">
-            {stock.exchange || ""}
+          <span className="text-[11px] text-muted-foreground font-medium mt-0.5 truncate max-w-40">
+            {stock.companyName || stock.exchange || ""}
           </span>
         </div>
       </Link>

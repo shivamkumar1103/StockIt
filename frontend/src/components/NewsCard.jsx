@@ -13,9 +13,7 @@ const NewsCard = ({ news }) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Image Placeholder or Actual Image */}
-      <div
-        className="h-40 w-full relative overflow-hidden shrink-0 bg-muted"
-      >
+      <div className="h-40 w-full relative overflow-hidden shrink-0 bg-muted">
         {news.image && (
           <img
             src={news.image}
@@ -23,8 +21,8 @@ const NewsCard = ({ news }) => {
             className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-all duration-500 scale-100 group-hover:scale-105"
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent"></div>
-        
+        <div className="absolute inset-0 bg-linear-to-t from-background/80 to-transparent"></div>
+
         {/* Category tag overlay */}
         <Badge className="absolute top-3 left-3 text-[10px] uppercase tracking-wider font-semibold pointer-events-none">
           {news.category || "News"}
@@ -39,7 +37,9 @@ const NewsCard = ({ news }) => {
 
         <div className="mt-auto flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex flex-col gap-1.5">
-            <span className="font-bold uppercase text-foreground">{news.source}</span>
+            <span className="font-bold uppercase text-foreground">
+              {news.source}
+            </span>
             <div className="flex items-center gap-1.5">
               <Clock size={12} />
               <span>{news.time}</span>

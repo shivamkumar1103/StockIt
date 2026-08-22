@@ -8,6 +8,10 @@ const holdingSchema = new moongose.Schema(
       uppercase: true,
       trim: true,
     },
+    companyName: {
+      type: String,
+      trim: true,
+    },
     quantity: {
       type: Number,
       required: [true, "Quantity is required"],

@@ -8,7 +8,7 @@ export const createWatchlist = async (userId) => {
   return await Watchlist.create({ user: userId });
 };
 
-export const addStockToWatchlist = async (userId, symbol, exchange) => {
+export const addStockToWatchlist = async (userId, symbol, exchange, companyName) => {
   const updatedWatchlist = await Watchlist.findOneAndUpdate(
     {
       user: userId,
@@ -18,6 +18,7 @@ export const addStockToWatchlist = async (userId, symbol, exchange) => {
         stocks: {
           symbol,
           exchange,
+          companyName,
         },
       },
     },
