@@ -3,6 +3,7 @@ import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 import AppError from "./utils/appError.js";
+import globalErrorHandler from "./controllers/errorController.js";
 import userRouter from "./routes/userRoutes.js";
 import stockRouter from "./routes/stockRoutes.js";
 import watchlistRouter from "./routes/watchlistRoutes.js";
@@ -49,12 +50,6 @@ app.use((req, res, next) => {
   next(err);
 });
 
-app.use((err, req, res, next) => {
-  // console.error("Error:", err.stack);
-  res.status(err.statusCode || 500).json({
-    status: err.status || "error",
-    message: err.message || "Internal Server Error",
-  });
-});
+app.use(globalErrorHandler);
 
 export default app;
