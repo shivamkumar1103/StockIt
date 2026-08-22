@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { Trash2 } from "lucide-react";
 
 const WatchlistItem = ({ stock, onDeleteClick }) => {
-  console.log("Rendering WatchlistItem for stock:", stock);
   return (
     <div className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-accent transition-colors group cursor-pointer">
       {/* Clickable area — navigates to stock detail */}
