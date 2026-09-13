@@ -1,4 +1,4 @@
-import { WebSocket } from "ws";
+import { WebSocket, WebSocketServer } from "ws";
 import { getQuote } from "./services/stockService.js";
 
 // set up upstream websocket server
@@ -93,6 +93,7 @@ const connectFinnhubWebSocket = () => {
 
           const updatedQuote = {
             ...current,
+            symbol,
             currentPrice,
             change,
             percentChange,
@@ -125,11 +126,36 @@ const connectFinnhubWebSocket = () => {
   });
 };
 
+// set up downstream websocket server
+const websocketServer = new WebSocketServer({
+  port: process.env.PORT || 3000,
+});
+
+websocketServer.on("connection", (clientSocket) => {
+  const snapshot = Array.from(stockStore.values());
+  clientSocket.send(
+    JSON.stringify({ type: "Market-Snapshot", data: snapshot }),
+  );
+});
+
+// Broadcast updates every 150 milliseconds
+setInterval(() => {
+  if (pendingUpdates.size == 0 || websocketServer.clients.size == 0) return; // No updates or no clients connected
+
+  const batch = Array.from(pendingUpdates.values());
+  const payload = JSON.stringify({ type: "Market-Update", data: batch });
+  for (const clientSocket of websocketServer.clients) {
+    if (clientSocket.readyState === WebSocket.OPEN) {
+      clientSocket.send(payload);
+    }
+  }
+
+  pendingUpdates.clear(); // Clear the pending updates after broadcasting
+}, 150);
+
 async function start() {
   await fetchInitialStockPrices();
   connectFinnhubWebSocket();
 }
 
 start();
-
-// set up downstream websocket server

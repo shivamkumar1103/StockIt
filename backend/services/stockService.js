@@ -9,10 +9,11 @@ const checkMarket = (market) => {
 // Quote
 export const getQuote = async (symbol, market = "US") => {
   checkMarket(market);
-
-  const data = await stockRepository.fetchQuote(symbol.trim().toUpperCase());
+  const cleanedSymbol = symbol.trim().toUpperCase();
+  const data = await stockRepository.fetchQuote(cleanedSymbol);
 
   return {
+    symbol: cleanedSymbol,
     currentPrice: data.c,
     change: data.d,
     percentChange: data.dp,
