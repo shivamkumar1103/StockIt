@@ -1,16 +1,16 @@
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { sectors } from "../data/marketData";
-
-const allSectors = ["All", ...sectors];
 
 const MarketToolbar = ({
   searchQuery,
   onSearchChange,
   activeSector,
   onSectorChange,
+  sectors = [],
 }) => {
+  const allSectors = ["All", ...sectors];
+
   return (
     <div className="flex flex-col gap-4">
       {/* Search + count row */}
@@ -27,10 +27,7 @@ const MarketToolbar = ({
       </div>
 
       {/* Sector tabs */}
-      <Tabs
-        value={activeSector}
-        onValueChange={onSectorChange}
-      >
+      <Tabs value={activeSector} onValueChange={onSectorChange}>
         <TabsList className="flex-wrap h-auto gap-1">
           {allSectors.map((sector) => (
             <TabsTrigger key={sector} value={sector} className="text-xs">

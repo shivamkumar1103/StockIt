@@ -1,10 +1,8 @@
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUp, ArrowDown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import {
-  TableCell,
-  TableRow,
-} from "@/components/ui/table";
+import { TableCell, TableRow } from "@/components/ui/table";
 
 const bgColors = [
   "bg-indigo-600",
@@ -15,8 +13,40 @@ const bgColors = [
 ];
 
 const MarketStockRow = ({ stock }) => {
-  const isPositive = stock.change >= 0;
+  const price = typeof stock.price === "number" ? stock.price : 0;
+  const change = typeof stock.change === "number" ? stock.change : 0;
+  const changePercent =
+    typeof stock.changePercent === "number" ? stock.changePercent : 0;
+  const isPositive = change >= 0;
   const logoBg = bgColors[(stock.symbol.charCodeAt(0) || 0) % bgColors.length];
+
+  // Flash price cell green/red on live ticks
+  const prevPriceRef = useRef(price);
+  const [flash, setFlash] = useState(null);
+  useEffect(() => {
+    if (!stock.isLive) return;
+    const prev = prevPriceRef.current;
+    if (price > prev) {
+      setFlash("up");
+      const t = setTimeout(() => setFlash(null), 700);
+      prevPriceRef.current = price;
+      return () => clearTimeout(t);
+    }
+    if (price < prev) {
+      setFlash("down");
+      const t = setTimeout(() => setFlash(null), 700);
+      prevPriceRef.current = price;
+      return () => clearTimeout(t);
+    }
+    prevPriceRef.current = price;
+  }, [price, stock.isLive]);
+
+  const priceClass =
+    flash === "up"
+      ? "text-emerald-500"
+      : flash === "down"
+        ? "text-red-500"
+        : "text-foreground";
 
   return (
     <TableRow className="group cursor-pointer transition-colors hover:bg-accent/50">
@@ -34,8 +64,14 @@ const MarketStockRow = ({ stock }) => {
 
           {/* Symbol + Name */}
           <div className="flex flex-col min-w-0">
-            <span className="font-semibold text-foreground text-sm">
+            <span className="font-semibold text-foreground text-sm flex items-center gap-1.5">
               {stock.symbol}
+              {stock.isLive && (
+                <span
+                  className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"
+                  title="Live price"
+                />
+              )}
             </span>
             <span className="text-xs text-muted-foreground truncate max-w-40">
               {stock.name}
@@ -44,8 +80,8 @@ const MarketStockRow = ({ stock }) => {
         </Link>
       </TableCell>
 
-      <TableCell className="font-medium text-foreground">
-        ${stock.price.toFixed(2)}
+      <TableCell className={`font-medium transition-colors ${priceClass}`}>
+        ${price.toFixed(2)}
       </TableCell>
 
       <TableCell>
@@ -57,7 +93,7 @@ const MarketStockRow = ({ stock }) => {
           }`}
         >
           {isPositive ? "+" : ""}
-          {stock.change.toFixed(2)}
+          {change.toFixed(2)}
         </span>
       </TableCell>
 
@@ -75,13 +111,9 @@ const MarketStockRow = ({ stock }) => {
           ) : (
             <ArrowDown size={12} className="mr-0.5" />
           )}
-          {Math.abs(stock.changePercent).toFixed(2)}%
+          {Math.abs(changePercent).toFixed(2)}%
         </Badge>
       </TableCell>
-
-      <TableCell className="text-muted-foreground">{stock.marketCap}</TableCell>
-
-      <TableCell className="text-muted-foreground">{stock.volume}</TableCell>
     </TableRow>
   );
 };
