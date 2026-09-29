@@ -1,48 +1,30 @@
 import { useState, useMemo } from "react";
-import marketData from "../data/marketData";
+import {
+  filterBySectorAndQuery,
+  getLiveCount,
+  getSectors,
+  getTopGainer,
+  getTopLoser,
+} from "../utils/marketStats";
 
 /**
- * Custom hook that manages market page filtering state.
- * Provides search + sector filtering and computes top gainer / loser.
+ * Pure filtering hook: takes an already-merged stock list and manages
+ * search + sector state with derived top gainer / loser / sectors.
+ * Data fetching/merging lives in useMarketData — pass its allStocks in.
  */
-const useMarketFilters = () => {
+const useMarketFilters = (allStocks = []) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeSector, setActiveSector] = useState("All");
 
-  const filteredStocks = useMemo(() => {
-    let stocks = marketData;
+  const filteredStocks = useMemo(
+    () => filterBySectorAndQuery(allStocks, activeSector, searchQuery),
+    [allStocks, searchQuery, activeSector],
+  );
 
-    // Filter by sector
-    if (activeSector !== "All") {
-      stocks = stocks.filter((s) => s.sector === activeSector);
-    }
-
-    // Filter by search query (symbol or name)
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      stocks = stocks.filter(
-        (s) =>
-          s.symbol.toLowerCase().includes(query) ||
-          s.name.toLowerCase().includes(query),
-      );
-    }
-
-    return stocks;
-  }, [searchQuery, activeSector]);
-
-  const topGainer = useMemo(() => {
-    if (filteredStocks.length === 0) return null;
-    return filteredStocks.reduce((best, stock) =>
-      stock.changePercent > best.changePercent ? stock : best,
-    );
-  }, [filteredStocks]);
-
-  const topLoser = useMemo(() => {
-    if (filteredStocks.length === 0) return null;
-    return filteredStocks.reduce((worst, stock) =>
-      stock.changePercent < worst.changePercent ? stock : worst,
-    );
-  }, [filteredStocks]);
+  const topGainer = useMemo(() => getTopGainer(filteredStocks), [filteredStocks]);
+  const topLoser = useMemo(() => getTopLoser(filteredStocks), [filteredStocks]);
+  const liveCount = useMemo(() => getLiveCount(allStocks), [allStocks]);
+  const sectors = useMemo(() => getSectors(allStocks), [allStocks]);
 
   return {
     searchQuery,
@@ -52,6 +34,8 @@ const useMarketFilters = () => {
     filteredStocks,
     topGainer,
     topLoser,
+    liveCount,
+    sectors,
   };
 };
 

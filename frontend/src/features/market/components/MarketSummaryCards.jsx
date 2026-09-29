@@ -26,15 +26,24 @@ const SummaryCard = ({ icon: Icon, label, value, subtext, colorClass }) => (
   </Card>
 );
 
+const formatCardSubtext = (stock, { signed = false } = {}) => {
+  if (!stock) return null;
+  const changePercent =
+    typeof stock.changePercent === "number" ? stock.changePercent : 0;
+  const price = typeof stock.price === "number" ? stock.price : 0;
+  const sign = signed && changePercent >= 0 ? "+" : "";
+  return `${sign}${changePercent.toFixed(2)}% · $${price.toFixed(2)}${stock.isLive ? " · Live" : ""}`;
+};
+
 const MarketSummaryCards = ({ totalCount, topGainer, topLoser }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      {/* Total Stocks */}
+      {/* Live Stocks */}
       <SummaryCard
         icon={BarChart3}
-        label="Total Stocks"
+        label="Live Stocks"
         value={totalCount}
-        subtext="Companies listed"
+        subtext="Streaming now"
         colorClass="bg-blue-600"
       />
 
@@ -43,11 +52,7 @@ const MarketSummaryCards = ({ totalCount, topGainer, topLoser }) => {
         icon={TrendingUp}
         label="Top Gainer"
         value={topGainer ? topGainer.symbol : "—"}
-        subtext={
-          topGainer
-            ? `+${topGainer.changePercent.toFixed(2)}% · $${topGainer.price.toFixed(2)}`
-            : null
-        }
+        subtext={formatCardSubtext(topGainer, { signed: true })}
         colorClass="bg-emerald-600"
       />
 
@@ -56,11 +61,7 @@ const MarketSummaryCards = ({ totalCount, topGainer, topLoser }) => {
         icon={TrendingDown}
         label="Top Loser"
         value={topLoser ? topLoser.symbol : "—"}
-        subtext={
-          topLoser
-            ? `${topLoser.changePercent.toFixed(2)}% · $${topLoser.price.toFixed(2)}`
-            : null
-        }
+        subtext={formatCardSubtext(topLoser)}
         colorClass="bg-red-600"
       />
     </div>
