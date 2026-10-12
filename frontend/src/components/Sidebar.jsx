@@ -8,6 +8,7 @@ import {
   Settings,
   LogOut,
   Briefcase,
+  TrendingUp,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -32,7 +33,10 @@ export default function Sidebar() {
     },
     {
       label: "Market",
-      items: [{ name: "News", path: "/news", icon: Newspaper }],
+      items: [
+        { name: "Market", path: "/market", icon: TrendingUp },
+        { name: "News", path: "/news", icon: Newspaper },
+      ],
     },
     {
       label: "Account",

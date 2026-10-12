@@ -8,6 +8,7 @@ import Dashboard from "../features/dashboard/pages/DashBoard";
 import Portfolio from "../features/portfolio/pages/Portfolio";
 import StockDetail from "../features/stockDetail/pages/StockDetail";
 import News from "../features/news/pages/News";
+import Market from "../features/market/pages/Market";
 import Settings from "../features/account/pages/Settings";
 import Support from "../features/support/pages/Support";
 import Layout from "../layouts/Layout";
@@ -30,6 +31,7 @@ function App() {
                 <Route path="portfolio" element={<Portfolio />} />
                 <Route path="stocks/:symbol" element={<StockDetail />} />
                 <Route path="news" element={<News />} />
+                <Route path="market" element={<Market />} />
                 <Route path="account" element={<Settings />} />
                 <Route path="support" element={<Support />} />
                 {/* Additional layout routes can be added here */}

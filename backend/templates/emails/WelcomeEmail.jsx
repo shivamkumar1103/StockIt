@@ -2,49 +2,110 @@ import React from "react";
 import {
   Html,
   Head,
+  Preview,
   Body,
   Container,
+  Section,
   Heading,
   Text,
   Button,
 } from "@react-email/components";
 
-// MODIFY LATER TO SAY ACCOUNT ACTIVATED INSTEAD OF WELCOME
 export default function WelcomeEmail({ firstName, url }) {
   return (
     <Html>
       <Head />
+      <Preview>Your TradeX account is activated!</Preview>
 
       <Body
         style={{
-          backgroundColor: "#f4f4f4",
-          fontFamily: "Arial",
+          backgroundColor: "#fafafa",
+          fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+          padding: "60px 0",
         }}
       >
         <Container
           style={{
-            backgroundColor: "#fff",
-            padding: "30px",
-            borderRadius: "8px",
+            maxWidth: "500px",
+            margin: "0 auto",
+            backgroundColor: "#ffffff",
+            borderRadius: "16px",
+            padding: "40px",
+            boxShadow: "0 10px 40px -10px rgba(0,0,0,0.08)",
+            boxSizing: "border-box",
+            border: "1px solid #f0f0f0",
           }}
         >
-          <Heading>Welcome {firstName}!</Heading>
-
-          <Text>Thanks for joining our stock trading platform.</Text>
-
-          <Button
-            href={url}
+          <Heading
             style={{
-              backgroundColor: "#2563eb",
-              color: "#fff",
-              padding: "12px 20px",
-              borderRadius: "6px",
+              fontSize: "24px",
+              fontWeight: "700",
+              color: "#0a0a0a",
+              marginBottom: "24px",
+              textAlign: "center",
             }}
           >
-            Get Started
-          </Button>
+            Account Activated!
+          </Heading>
 
-          <Text>Happy Trading!</Text>
+          <Text
+            style={{
+              fontSize: "16px",
+              color: "#525252",
+              lineHeight: "26px",
+              marginBottom: "24px",
+            }}
+          >
+            Hi <strong>{firstName}</strong>,
+          </Text>
+
+          <Text
+            style={{
+              fontSize: "16px",
+              color: "#525252",
+              lineHeight: "26px",
+              marginBottom: "32px",
+            }}
+          >
+            Thanks for joining TradeX. Your account has been fully activated and you're ready to start your trading journey with us.
+          </Text>
+
+          <Section
+            style={{
+              textAlign: "center",
+              marginBottom: "32px",
+            }}
+          >
+            <Button
+              href={url}
+              style={{
+                backgroundColor: "#0a0a0a",
+                color: "#ffffff",
+                padding: "16px 32px",
+                borderRadius: "8px",
+                textDecoration: "none",
+                fontWeight: "600",
+                fontSize: "15px",
+                display: "inline-block",
+              }}
+            >
+              Go to Dashboard
+            </Button>
+          </Section>
+
+          <Text
+            style={{
+              fontSize: "15px",
+              color: "#0a0a0a",
+              marginTop: "32px",
+              fontWeight: "500",
+              borderTop: "1px solid #f0f0f0",
+              paddingTop: "24px",
+            }}
+          >
+            Happy Trading,<br />
+            <span style={{ color: "#525252" }}>The TradeX Team</span>
+          </Text>
         </Container>
       </Body>
     </Html>

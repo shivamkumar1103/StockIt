@@ -15,40 +15,45 @@ export default function EmailVerification({ firstName, url }) {
   return (
     <Html>
       <Head />
-      <Preview>Verify your email address</Preview>
+      <Preview>Verify your email address for TradeX</Preview>
 
       <Body
         style={{
-          backgroundColor: "#f5f7fb",
-          fontFamily: "Arial, sans-serif",
-          padding: "40px 0",
+          backgroundColor: "#fafafa",
+          fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+          padding: "60px 0",
         }}
       >
         <Container
           style={{
-            maxWidth: "600px",
+            maxWidth: "500px",
             margin: "0 auto",
             backgroundColor: "#ffffff",
-            borderRadius: "8px",
+            borderRadius: "16px",
             padding: "40px",
+            boxShadow: "0 10px 40px -10px rgba(0,0,0,0.08)",
             boxSizing: "border-box",
+            border: "1px solid #f0f0f0",
           }}
         >
           <Heading
             style={{
-              fontSize: "28px",
-              color: "#111827",
+              fontSize: "24px",
+              fontWeight: "700",
+              color: "#0a0a0a",
               marginBottom: "24px",
+              textAlign: "center",
             }}
           >
-            Welcome to TradeX 🚀
+            Welcome to TradeX
           </Heading>
 
           <Text
             style={{
               fontSize: "16px",
-              color: "#374151",
-              lineHeight: "24px",
+              color: "#525252",
+              lineHeight: "26px",
+              marginBottom: "24px",
             }}
           >
             Hi <strong>{firstName}</strong>,
@@ -57,56 +62,46 @@ export default function EmailVerification({ firstName, url }) {
           <Text
             style={{
               fontSize: "16px",
-              color: "#374151",
-              lineHeight: "24px",
+              color: "#525252",
+              lineHeight: "26px",
+              marginBottom: "32px",
             }}
           >
-            Thanks for creating your TradeX account. Before you can start
-            investing, please verify your email address by clicking the button
-            below.
+            Thanks for creating your TradeX account. Before you can start investing, please verify your email address by clicking the button below.
           </Text>
 
           <Section
             style={{
               textAlign: "center",
-              margin: "35px 0",
+              marginBottom: "32px",
             }}
           >
             <Button
               href={url}
               style={{
-                backgroundColor: "#2563eb",
+                backgroundColor: "#0a0a0a",
                 color: "#ffffff",
-                padding: "14px 28px",
-                borderRadius: "6px",
+                padding: "16px 32px",
+                borderRadius: "8px",
                 textDecoration: "none",
-                fontWeight: "bold",
+                fontWeight: "600",
+                fontSize: "15px",
+                display: "inline-block",
               }}
             >
-              Verify Email
+              Verify Email Address
             </Button>
           </Section>
 
           <Text
             style={{
               fontSize: "14px",
-              color: "#6b7280",
+              color: "#737373",
               lineHeight: "22px",
+              marginBottom: "16px",
             }}
           >
-            This verification link will expire in
-            <strong> 24 hours</strong>.
-          </Text>
-
-          <Text
-            style={{
-              fontSize: "14px",
-              color: "#6b7280",
-              lineHeight: "22px",
-            }}
-          >
-            If the button doesn't work, copy and paste this URL into your
-            browser:
+            This verification link will expire in <strong>24 hours</strong>. If the button doesn't work, copy and paste this URL into your browser:
           </Text>
 
           <Text
@@ -114,6 +109,10 @@ export default function EmailVerification({ firstName, url }) {
               fontSize: "14px",
               color: "#2563eb",
               wordBreak: "break-all",
+              marginBottom: "32px",
+              padding: "12px",
+              backgroundColor: "#f5f5f5",
+              borderRadius: "6px",
             }}
           >
             {url}
@@ -121,9 +120,10 @@ export default function EmailVerification({ firstName, url }) {
 
           <Text
             style={{
-              marginTop: "32px",
               fontSize: "14px",
-              color: "#6b7280",
+              color: "#a3a3a3",
+              borderTop: "1px solid #f0f0f0",
+              paddingTop: "24px",
             }}
           >
             If you didn't create an account, you can safely ignore this email.
@@ -131,13 +131,14 @@ export default function EmailVerification({ firstName, url }) {
 
           <Text
             style={{
-              marginTop: "30px",
-              color: "#111827",
+              fontSize: "15px",
+              color: "#0a0a0a",
+              marginTop: "24px",
+              fontWeight: "500",
             }}
           >
-            Happy Trading,
-            <br />
-            <strong>The TradeX Team</strong>
+            Happy Trading,<br />
+            <span style={{ color: "#525252" }}>The TradeX Team</span>
           </Text>
         </Container>
       </Body>

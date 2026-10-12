@@ -11,6 +11,7 @@ export default function Navbar() {
     if (pathname.startsWith('/portfolio')) return 'Portfolio';
     if (pathname.startsWith('/stocks')) return 'Stock Detail';
     if (pathname.startsWith('/news')) return 'News';
+    if (pathname.startsWith('/market')) return 'Market';
     if (pathname.startsWith('/account')) return 'Settings';
     if (pathname.startsWith('/support')) return 'Support';
     return 'Dashboard';

@@ -1,13 +1,9 @@
 import mongoose from "mongoose";
 import app from "./app.js";
-
-// handle uncaught exceptions
-process.on("uncaughtException", (err) => {
-  console.log("UNCAUGHT EXCEPTION!  Shutting down...");
-  console.log(err);
-  console.log(err.name, err.message);
-  process.exit(1);
-});
+import {
+  initMarketWebSocket,
+  closeMarketWebSocket,
+} from "./websocket/index.js";
 
 // connect databse
 const DB = process.env.DATABASE.replace(
@@ -22,19 +18,67 @@ const server = app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-// handle unhandled promise rejections
-process.on("unhandledRejection", (err) => {
-  console.log("UNHANDLED REJECTION!  Shutting down...");
-  console.log(err, err.message);
-  server.close(() => {
-    process.exit(1);
-  });
+// attach market websocket (Finnhub live -> ws://<host>:<port>/ws/market)
+// Keep the returned server so shutdown can close WS clients before HTTP.
+const marketWss = initMarketWebSocket(server);
+void marketWss;
+
+let isShuttingDown = false;
+
+// Order matters: WS clients -> WS server/upstream -> HTTP -> Mongo.
+// Closing WS first lets `server.close()` resolve instead of hanging on
+// open upgrade sockets that share the same HTTP server.
+const gracefulShutdown = async (reason, err, exitCode = 0) => {
+  if (isShuttingDown) return;
+  isShuttingDown = true;
+
+  if (err) {
+    console.log(`${reason}`, err.name || err, err.message || err);
+  } else {
+    console.log(`${reason}`);
+  }
+
+  try {
+    await closeMarketWebSocket();
+    console.log("Market WebSocket closed");
+  } catch (closeErr) {
+    console.log("Error closing Market WebSocket:", closeErr);
+  }
+
+  try {
+    await new Promise((resolve, reject) => {
+      server.close((closeErr) => (closeErr ? reject(closeErr) : resolve()));
+    });
+    console.log("HTTP server closed");
+  } catch (closeErr) {
+    console.log("Error closing HTTP server:", closeErr);
+  }
+
+  try {
+    await mongoose.connection.close();
+    console.log("DB connection closed");
+  } catch (closeErr) {
+    console.log("Error closing DB connection:", closeErr);
+  }
+
+  process.exit(exitCode);
+};
+
+// handle uncaught exceptions
+process.on("uncaughtException", (err) => {
+  gracefulShutdown("UNCAUGHT EXCEPTION! Shutting down...", err, 1);
 });
 
-// handle SIGTERM signal
+// handle unhandled promise rejections
+process.on("unhandledRejection", (err) => {
+  gracefulShutdown("UNHANDLED REJECTION! Shutting down...", err, 1);
+});
+
+// handle SIGTERM / SIGINT signals
 process.on("SIGTERM", () => {
-  console.log("SIGTERM received. Shutting down gracefully...");
-  server.close(() => {
-    console.log("Process terminated!");
-  });
+  gracefulShutdown("SIGTERM received. Shutting down gracefully...");
+});
+
+process.on("SIGINT", () => {
+  gracefulShutdown("SIGINT received. Shutting down gracefully...");
 });
