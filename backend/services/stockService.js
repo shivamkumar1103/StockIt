@@ -1,4 +1,12 @@
 import * as stockRepository from "../repository/stockRepository.js";
+import {
+  FINNHUB_TTL_SECONDS,
+  buildQuoteKey,
+  buildProfileKey,
+  buildSearchKey,
+  buildNewsKey,
+  getOrSet,
+} from "./finnhubCacheService.js";
 
 const checkMarket = (market) => {
   if (market === "IN") {
@@ -6,49 +14,70 @@ const checkMarket = (market) => {
   }
 };
 
-// Quote
+// Quote (Finnhub, Redis cached)
 export const getQuote = async (symbol, market = "US") => {
   checkMarket(market);
   const cleanedSymbol = symbol.trim().toUpperCase();
-  const data = await stockRepository.fetchQuote(cleanedSymbol);
+  return getOrSet(
+    buildQuoteKey(cleanedSymbol),
+    FINNHUB_TTL_SECONDS.quote,
+    async () => {
+      const data = await stockRepository.fetchQuote(cleanedSymbol);
 
-  return {
-    symbol: cleanedSymbol,
-    currentPrice: data.c,
-    change: data.d,
-    percentChange: data.dp,
-    high: data.h,
-    low: data.l,
-    open: data.o,
-    previousClose: data.pc,
-    isProfit: data.d > 0,
-    isLoss: data.d < 0,
-  };
+      return {
+        symbol: cleanedSymbol,
+        currentPrice: data.c,
+        change: data.d,
+        percentChange: data.dp,
+        high: data.h,
+        low: data.l,
+        open: data.o,
+        previousClose: data.pc,
+        isProfit: data.d > 0,
+        isLoss: data.d < 0,
+      };
+    },
+  );
 };
 
-// Company Profile
+// Company Profile (Finnhub, Redis cached)
 export const getCompanyProfile = async (symbol, market) => {
   checkMarket(market);
-  return await stockRepository.fetchCompanyProfile(symbol.trim().toUpperCase());
+  const cleanedSymbol = symbol.trim().toUpperCase();
+  return getOrSet(
+    buildProfileKey(cleanedSymbol),
+    FINNHUB_TTL_SECONDS.profile,
+    () => stockRepository.fetchCompanyProfile(cleanedSymbol),
+  );
 };
 
-// Search
+// Search (Finnhub, Redis cached)
 export const searchStocks = async (query, market) => {
   checkMarket(market);
-  return await stockRepository.fetchSearchResults(query.trim());
+  const cleanedQuery = query.trim();
+  return getOrSet(
+    buildSearchKey(cleanedQuery),
+    FINNHUB_TTL_SECONDS.search,
+    () => stockRepository.fetchSearchResults(cleanedQuery),
+  );
 };
 
-// Market News
+// Market News (Finnhub, Redis cached)
 export const getMarketNews = async (
   category = "general",
   market,
   minId = 0,
 ) => {
   checkMarket(market);
-  return await stockRepository.fetchNews(category, minId);
+  return getOrSet(
+    buildNewsKey(category, minId),
+    FINNHUB_TTL_SECONDS.news,
+    () => stockRepository.fetchNews(category, minId),
+  );
 };
 
-// Historical Data
+// Historical Data (TwelveData — intentionally NOT Redis cached,
+// only Finnhub calls use Redis per scope)
 export const getHistoricalData = async (
   symbol,
   interval,

@@ -1,9 +1,13 @@
 import mongoose from "mongoose";
 import app from "./app.js";
+import { connectRedis, disconnectRedis } from "./utils/redisClient.js";
 import {
   initMarketWebSocket,
   closeMarketWebSocket,
 } from "./websocket/index.js";
+
+// connect redis (fail-open: server boots even if Redis is down)
+void connectRedis().catch(() => {});
 
 // connect databse
 const DB = process.env.DATABASE.replace(
@@ -25,7 +29,7 @@ void marketWss;
 
 let isShuttingDown = false;
 
-// Order matters: WS clients -> WS server/upstream -> HTTP -> Mongo.
+// Order matters: WS clients -> WS server/upstream -> HTTP -> Redis -> Mongo.
 // Closing WS first lets `server.close()` resolve instead of hanging on
 // open upgrade sockets that share the same HTTP server.
 const gracefulShutdown = async (reason, err, exitCode = 0) => {
@@ -52,6 +56,13 @@ const gracefulShutdown = async (reason, err, exitCode = 0) => {
     console.log("HTTP server closed");
   } catch (closeErr) {
     console.log("Error closing HTTP server:", closeErr);
+  }
+
+  try {
+    await disconnectRedis();
+    console.log("Redis connection closed");
+  } catch (closeErr) {
+    console.log("Error closing Redis connection:", closeErr);
   }
 
   try {

@@ -1,0 +1,56 @@
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: stockit-redis
+    # Cache-only: 256MB cap with LRU eviction, no disk persistence
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru --save "" --appendonly no
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    restart: unless-stopped
+
+  backend:
+    build: ./backend
+    container_name: stockit-backend
+    env_file:
+      - ./backend/config.env
+    environment:
+      # Inside the compose network Redis is reachable as `redis`,
+      # overriding the localhost default in config.env
+      REDIS_URL: redis://redis:6379
+      CACHE_ENABLED: "true"
+      PORT: "3000"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/app
+      - backend-node-modules:/app/node_modules
+    depends_on:
+      redis:
+        condition: service_healthy
+    command: npm run dev
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: stockit-frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - frontend-node-modules:/app/node_modules
+    depends_on:
+      - backend
+    command: npm run dev -- --host 0.0.0.0 --port 5173
+    restart: unless-stopped
+
+volumes:
+  redis-data:
+  backend-node-modules:
+  frontend-node-modules:
